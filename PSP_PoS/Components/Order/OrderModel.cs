@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PSP_PoS.Components.Account;
+using PSP_PoS.Components.Customer;
+using PSP_PoS.Components.Discount;
+using PSP_PoS.Components.Tax;
+using PSP_PoS.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PSP_PoS.Components.Order
@@ -8,13 +13,26 @@ namespace PSP_PoS.Components.Order
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
         [ForeignKey("CustomerModel")]
         public Guid CustomerId { get; set; }
-        [ForeignKey("EmplyeeModel")]
+
+        [ForeignKey("EmployeeModel")]
         public Guid EmployeeId { get; set; }
         public DateTime? Date { get; set; }
-        public int OrderStatus { get; set; }
-        public int OrderType { get; set; }
-        public int TotalPrice { get; set; } // in cents
+        public Status OrderStatus { get; set; }
+        public decimal? Price { get; set; }
+
+        [ForeignKey("TaxModel")]
+        public TaxType Tax { get; set; }
+
+        public decimal? Tip { get; set; }
+
+        [ForeignKey("DiscountModel")]
+        public DiscountType? Discount { get; set; }
+
+        public decimal? FinalPrice { get; set; }
+
+        public PaymentType? PaymentType { get; set; }
     }
 }

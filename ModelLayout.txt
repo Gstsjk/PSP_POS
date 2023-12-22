@@ -1,0 +1,68 @@
+Employee -> Id    Primary
+            Username
+            Password
+            Name
+            Surname
+            Privileges
+            WorkingDays  bit enum
+            StartTime  dateTime
+            EndTime   dateTime
+
+Customer -> Id     Primary
+            Email
+            Password
+            Name
+            Surname
+
+
+Order ->    Id  Primary
+            EmployeeId   foreign
+            CustomerId     foreign
+            Date
+            OrderStatus
+            Price
+            TaxRateType   foreign
+            Tip
+            DiscountType
+            FinalPrice
+            PaymentType
+
+Product  ->    Id   Primary
+            Ean
+            Name
+            Description
+            Price
+            Category
+            Stock
+
+OrderProduct ->    Id   Primary
+                OrderId
+                ProductId
+                Quantity
+
+Service ->  Id    Primary
+            Name
+            EmployeeId   foreign
+            CustomerId   foreign
+            Date
+            ServiceStatus
+            Duration
+            Location   
+            Price
+            TaxRateType   foreign
+            Tip
+            DiscountType   foreign
+            FinalPrice
+            PaymentType
+
+TaxRate ->  TaxRateType    Primary
+            Percentage
+
+Discount -> DiscountType
+            Percentage
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using PSP_PoS.Enums;
 
 namespace PSP_PoS.Components.Product
 {
@@ -8,14 +9,11 @@ namespace PSP_PoS.Components.Product
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public int Price { get; set; }
-        [ForeignKey("TaxModel")]
-        public Guid TaxRate { get; set; }
+        public string Name { get; set; }
+        public string Ean { get; set; }
         public string? Description { get; set; }
-        public string? ImageURL { get; set; }
-        [ForeignKey("CategoryModel")]
-        public Guid CategoryId { get; set; }
+        public decimal Price { get; set; }
+        public CategoryType Category { get; set; }
         public int Stock { get; set; }
     }
 }

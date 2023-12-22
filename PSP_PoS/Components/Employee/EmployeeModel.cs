@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using PSP_PoS.Enums;
 
 namespace PSP_PoS.Components.Account
 {
@@ -11,7 +12,12 @@ namespace PSP_PoS.Components.Account
         public string? Username { get; set; }
         public string? Password { get; set; }
         public string? Name { get; set; }
-        public string? SurName { get; set; }
+        public string? Surname { get; set; }
         public int Privileges { get; set; }
+        public WorkingDays WorkingDays { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
     }
+
+
 }
