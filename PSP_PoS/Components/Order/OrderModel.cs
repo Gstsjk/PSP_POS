@@ -14,25 +14,18 @@ namespace PSP_PoS.Components.Order
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        public DateTime DateCreated { get; set; }
+        public Status OrderStatus { get; set; }
+        public decimal Tip { get; set; }
+        public PaymentType PaymentType { get; set; }
+
         [ForeignKey("CustomerModel")]
         public Guid CustomerId { get; set; }
 
         [ForeignKey("EmployeeModel")]
         public Guid EmployeeId { get; set; }
-        public DateTime? Date { get; set; }
-        public Status OrderStatus { get; set; }
-        public decimal? Price { get; set; }
 
         [ForeignKey("TaxModel")]
-        public TaxType Tax { get; set; }
-
-        public decimal? Tip { get; set; }
-
-        [ForeignKey("DiscountModel")]
-        public DiscountType? Discount { get; set; }
-
-        public decimal? FinalPrice { get; set; }
-
-        public PaymentType? PaymentType { get; set; }
+        public Guid TaxId { get; set; }
     }
 }

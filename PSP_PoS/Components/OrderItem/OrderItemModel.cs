@@ -6,21 +6,21 @@ using PSP_PoS.Components.Product;
 
 namespace PSP_PoS.Components.OrderProduct
 {
-    public class OrderProductModel
+    public class OrderItemModel
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
         [Required]
         [ForeignKey("OrderModel")]
         public Guid OrderId { get; set; }
 
+        [Key]
         [Required]
-        [ForeignKey("ProductModel")]
-        public Guid ProductId { get; set; }
+        [ForeignKey("ItemModel")]
+        public Guid ItemId { get; set; }
 
         [Required]
         public int Quantity { get; set; }
+
+        public DateTime StartTime { get; set; }
     }
 }

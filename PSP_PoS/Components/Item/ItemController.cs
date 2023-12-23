@@ -5,7 +5,7 @@ namespace PSP_PoS.Components.Product
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ItemController : ControllerBase
     {
     }
 }

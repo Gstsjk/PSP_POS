@@ -1,17 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using PSP_PoS.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PSP_PoS.Enums;
 
-namespace PSP_PoS.Components.Tax
+namespace PSP_PoS.Components.Category
 {
-    public class TaxModel
+    public class CategoryModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]        
-        public int Rate { get; set; }
     }
 }

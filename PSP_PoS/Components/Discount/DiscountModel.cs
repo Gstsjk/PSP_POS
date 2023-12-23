@@ -7,9 +7,11 @@ namespace PSP_PoS.Components.Discount
     public class DiscountModel
     {
         [Key]
-        public DiscountType DiscountType { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
         [Required]
-        public int Percentage { get; set; } // 0 - 100 % easier t
+        public DiscountType DiscountType { get; set; }
+        [Required]
+        public int Percentage { get; set; } // 0 - 100 %
     }
 }

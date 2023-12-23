@@ -13,34 +13,16 @@ namespace PSP_PoS.Components.Service
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
-        [Required]
         public string Name { get; set; }
-
-        [ForeignKey("CustomerModel")]
-        public Guid CustomerId { get; set; }
-
-        [ForeignKey("EmployeeModel")]
-        public Guid EmployeeId { get; set; }
-        public DateTime? Date { get; set; }
-        public Status ServiceStatus { get; set; }
-
+        public string Description { get; set; }
         public TimeSpan Duration { get; set; }
-
-        public string Location { get; set; }
-
         public decimal Price { get; set; }
 
-        [ForeignKey("TaxModel")]
-        public TaxType Tax { get; set; }
-
-        public decimal? Tip { get; set; }
+        [ForeignKey("CategoryModel")]
+        public Guid CategoryId { get; set; }
 
         [ForeignKey("DiscountModel")]
-        public DiscountType? Discount { get; set; }
+        public Guid DiscountId { get; set; }
 
-        public decimal? FinalPrice { get; set; }
-
-        public PaymentType? PaymentType { get; set; }
     }
 }
