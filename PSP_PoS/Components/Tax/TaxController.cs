@@ -17,11 +17,12 @@ namespace PSP_PoS.Controllers
         [HttpPost]
         public IActionResult AddTax([FromBody] TaxModel tax)
         {
+            Console.WriteLine(tax.Id);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            
             _taxService.AddTax(tax);
 
             return CreatedAtAction(nameof(GetTaxById), new { id = tax.Id }, tax);
