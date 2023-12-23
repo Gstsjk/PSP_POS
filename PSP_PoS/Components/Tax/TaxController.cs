@@ -7,18 +7,24 @@ namespace PSP_PoS.Controllers
     [ApiController]
     public class TaxController : ControllerBase
     {
-        private readonly TaxService _taxService;
+        private readonly ITaxService _taxService;
 
-        public TaxController(TaxService taxService)
+        public TaxController(ITaxService taxService)
         {
             _taxService = taxService;
         }
 
-        [HttpGet]
-        public IActionResult GetTaxes()
+        [HttpPost]
+        public IActionResult AddTax([FromBody] TaxModel tax)
         {
-            var taxes = _taxService.GetAllTaxes();
-            return Ok(taxes);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _taxService.AddTax(tax);
+
+            return CreatedAtAction(nameof(GetTaxById), new { id = tax.Id }, tax);
         }
 
         [HttpGet("{id}")]
@@ -39,17 +45,11 @@ namespace PSP_PoS.Controllers
             return Ok(tax);
         }
 
-        [HttpPost]
-        public IActionResult AddTax([FromBody] TaxModel tax)
+        [HttpGet]
+        public IActionResult GetTaxes()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _taxService.AddTax(tax);
-
-            return CreatedAtAction(nameof(GetTaxById), new { id = tax.Id }, tax);
+            var taxes = _taxService.GetAllTaxes();
+            return Ok(taxes);
         }
 
         [HttpPut("{id}")]
