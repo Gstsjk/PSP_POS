@@ -4,7 +4,7 @@ using PSP_PoS.Enums;
 
 namespace PSP_PoS.Components.Discount
 {
-    public class DiscountModel
+    public class Discount
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

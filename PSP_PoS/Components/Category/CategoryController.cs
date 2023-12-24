@@ -2,7 +2,7 @@
 using PSP_PoS.Components.Category;
 
 
-namespace PSP_PoS.Controllers
+namespace PSP_PoS.Components.Category
 {
     [Route("api/categories")]
     [ApiController]
@@ -17,7 +17,7 @@ namespace PSP_PoS.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddCategory([FromBody] CategoryModel category)
+        public IActionResult AddCategory([FromBody] Category category)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace PSP_PoS.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] CategoryModel updatedCategory)
+        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] Category updatedCategory)
         {
             if (!System.Guid.TryParse(id, out var categoryId))
             {

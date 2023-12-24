@@ -1,14 +1,10 @@
-﻿using PSP_PoS.Components.Account;
-using PSP_PoS.Components.Customer;
-using PSP_PoS.Components.Discount;
-using PSP_PoS.Components.Tax;
-using PSP_PoS.Enums;
+﻿using PSP_PoS.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PSP_PoS.Components.Order
 {
-    public class OrderModel
+    public class Order
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,10 +15,10 @@ namespace PSP_PoS.Components.Order
         public decimal Tip { get; set; }
         public PaymentType PaymentType { get; set; }
 
-        [ForeignKey("CustomerModel")]
+        [ForeignKey("Customer")]
         public Guid CustomerId { get; set; }
 
-        [ForeignKey("EmployeeModel")]
+        [ForeignKey("Employee")]
         public Guid EmployeeId { get; set; }
 
         [ForeignKey("TaxModel")]

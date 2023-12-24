@@ -3,16 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PSP_PoS.Components.Reservation
 {
-    public class ReservationModel
+    public class Reservation
     {
         [Key]
         [Required]
-        [ForeignKey("OrderModel")]
+        [ForeignKey("Order")]
         public Guid OrderId { get; set; }
 
         [Key]
         [Required]
-        [ForeignKey("ServiceModel")]
+        [ForeignKey("Service")]
         public Guid ServiceId { get; set; }
 
         [Required]

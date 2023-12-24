@@ -11,20 +11,20 @@ namespace PSP_PoS.Components.Category
             _context = context;
         }
 
-        public List<CategoryModel> GetAllCategories()
+        public List<Category> GetAllCategories()
         {
             return _context.Categories.ToList();
         }
-        public CategoryModel GetCategoryById(Guid categoryId)
+        public Category GetCategoryById(Guid categoryId)
         {
             return _context.Categories.FirstOrDefault(t => t.Id == categoryId);
         }
-        public void AddCategory(CategoryModel category)
+        public void AddCategory(Category category)
         { 
             _context.Categories.Add(category);
             _context.SaveChanges();
         }
-        public void UpdateCategory(CategoryModel category)
+        public void UpdateCategory(Category category)
         {
             _context.Categories.Update(category);
             _context.SaveChanges();

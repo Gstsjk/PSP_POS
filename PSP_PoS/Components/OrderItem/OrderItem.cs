@@ -2,20 +2,20 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PSP_PoS.Components.Order;
-using PSP_PoS.Components.Product;
+using PSP_PoS.Components.Item;
 
-namespace PSP_PoS.Components.OrderProduct
+namespace PSP_PoS.Components.OrderItem
 {
-    public class OrderItemModel
+    public class OrderItem
     {
         [Key]
         [Required]
-        [ForeignKey("OrderModel")]
+        [ForeignKey("Order")]
         public Guid OrderId { get; set; }
 
         [Key]
         [Required]
-        [ForeignKey("ItemModel")]
+        [ForeignKey("Item")]
         public Guid ItemId { get; set; }
 
         [Required]

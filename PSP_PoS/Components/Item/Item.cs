@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using PSP_PoS.Enums;
 
-namespace PSP_PoS.Components.Product
+namespace PSP_PoS.Components.Item
 {
-    public class ItemModel
+    public class Item
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,10 +14,10 @@ namespace PSP_PoS.Components.Product
         public decimal Price { get; set; }
         public int Stock { get; set; }
 
-        [ForeignKey("CategoryModel")]
+        [ForeignKey("Category")]
         public Guid CategoryId { get; set; }
 
-        [ForeignKey("DiscountModel")]
+        [ForeignKey("Discount")]
         public Guid DiscountId { get; set; }
     }
 }

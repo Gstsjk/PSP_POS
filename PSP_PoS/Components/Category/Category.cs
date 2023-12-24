@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PSP_PoS.Components.Category
 {
-    public class CategoryModel
+    public class Category
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

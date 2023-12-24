@@ -1,4 +1,5 @@
-﻿using PSP_PoS.Components.Account;
+﻿using PSP_PoS.Components.Employee;
+using PSP_PoS.Components.Tax;
 using PSP_PoS.Data;
 
 namespace PSP_PoS.Components.Employee
@@ -12,22 +13,22 @@ namespace PSP_PoS.Components.Employee
             _dataContext = context;
         }
 
-        public bool CreateNewEmployee(EmployeeModel employee)
+        public bool CreateNewEmployee(Employee employee)
         {
             // validacija ar viskas ok
             _dataContext.Employees.Add(employee);
             return _dataContext.SaveChanges() == 1 ? true : false;
         }
 
-        public EmployeeModel GetEmployeeById(Guid id)
+        public Employee GetEmployeeById(Guid id)
         {
             return _dataContext.Employees.Find(id);
             //_dataContext.Employees.FirstOrDefault(x => x.Id == id);
         }
 
-        public EmployeeModel GetEmployeeByUsername(string username)
+        public Employee GetEmployeeByUsername(string username)
         {
-            EmployeeModel employee = _dataContext.Employees.FirstOrDefault(x => x.Username == username);
+            Employee employee = _dataContext.Employees.FirstOrDefault(x => x.Username == username);
             if (employee == null)
             {
                 return null;
@@ -36,13 +37,13 @@ namespace PSP_PoS.Components.Employee
             return employee;
         }
 
-        public bool UpdateEmployee(EmployeeModel employee)
+        public bool UpdateEmployee(Employee employee)
         {
             _dataContext.Employees.Update(employee);
             return _dataContext.SaveChanges() == 1 ? true : false;
         }
 
-        public bool DeleteEmployee(EmployeeModel employee)
+        public bool DeleteEmployee(Employee employee)
         {
             _dataContext.Employees.Remove(employee);
             return _dataContext.SaveChanges() == 1 ? true : false;

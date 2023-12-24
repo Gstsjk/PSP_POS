@@ -2,10 +2,10 @@
 {
     public interface ITaxService
     {
-        List<TaxModel> GetAllTaxes();
-        TaxModel GetTaxById(Guid taxId);
-        void AddTax(TaxModel tax);
-        void UpdateTax(TaxModel tax);
+        List<Tax> GetAllTaxes();
+        Tax GetTaxById(Guid taxId);
+        void AddTax(Tax tax);
+        void UpdateTax(Tax tax);
         void DeleteTax(Guid taxId);
     }
 }

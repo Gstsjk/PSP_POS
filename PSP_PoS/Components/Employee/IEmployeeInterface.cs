@@ -1,4 +1,4 @@
-﻿using PSP_PoS.Components.Account;
+﻿using PSP_PoS.Components.Employee;
 
 namespace PSP_PoS.Components.Employee
 {

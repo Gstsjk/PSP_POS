@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_PoS.Components.Tax;
 
-namespace PSP_PoS.Controllers
+namespace PSP_PoS.Components.Tax
 {
     [Route("api/taxes")]
     [ApiController]
@@ -15,7 +15,7 @@ namespace PSP_PoS.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddTax([FromBody] TaxModel tax)
+        public IActionResult AddTax([FromBody] Tax tax)
         {
             Console.WriteLine(tax.Id);
             if (!ModelState.IsValid)
@@ -54,7 +54,7 @@ namespace PSP_PoS.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateTax([FromRoute] string id, [FromBody] TaxModel updatedTax)
+        public IActionResult UpdateTax([FromRoute] string id, [FromBody] Tax updatedTax)
         {
             if (!System.Guid.TryParse(id, out var taxId))
             {

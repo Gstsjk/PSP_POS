@@ -4,10 +4,10 @@ namespace PSP_PoS.Components.Category
 {
     public interface ICategoryService
     {
-        List<CategoryModel> GetAllCategories();
-        CategoryModel GetCategoryById(Guid categoryId);
-        void AddCategory(CategoryModel category);
-        void UpdateCategory(CategoryModel category);
+        List<Category> GetAllCategories();
+        Category GetCategoryById(Guid categoryId);
+        void AddCategory(Category category);
+        void UpdateCategory(Category category);
         void DeleteCategory(Guid categoryId);
     }
 }

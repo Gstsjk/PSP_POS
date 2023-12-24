@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using PSP_PoS.Enums;
 
-namespace PSP_PoS.Components.Account
+namespace PSP_PoS.Components.Employee
 {
-    public class EmployeeModel
+    public class Employee
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -1,4 +1,5 @@
-﻿using PSP_PoS.Data;
+﻿
+using PSP_PoS.Data;
 
 namespace PSP_PoS.Components.Tax
 {
@@ -11,23 +12,23 @@ namespace PSP_PoS.Components.Tax
             _context = context;
         }
 
-        public List<TaxModel> GetAllTaxes()
+        public List<Tax> GetAllTaxes()
         {
             return _context.Taxes.ToList();
         }
 
-        public TaxModel GetTaxById(Guid taxId)
+        public Tax GetTaxById(Guid taxId)
         {
             return _context.Taxes.FirstOrDefault(t => t.Id == taxId);
         }
 
-        public void AddTax(TaxModel tax)
+        public void AddTax(Tax tax)
         {
             _context.Taxes.Add(tax);
             _context.SaveChanges();
         }
 
-        public void UpdateTax(TaxModel tax)
+        public void UpdateTax(Tax tax)
         {
             _context.Taxes.Update(tax);
             _context.SaveChanges();
