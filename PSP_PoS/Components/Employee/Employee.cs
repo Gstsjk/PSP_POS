@@ -9,13 +9,29 @@ namespace PSP_PoS.Components.Employee
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
+        [Required]
         public string Username { get; set; }
+
+        [Required]
         public string Password { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string Surname { get; set; }
+
+        [Required]
         public int Privileges { get; set; }
+
+        [Required]
         public WorkingDays WorkingDays { get; set; }
+
+        [Required]
         public TimeSpan StartTime { get; set; }
+
+        [Required]
         public TimeSpan EndTime { get; set; }
 
         public Employee()

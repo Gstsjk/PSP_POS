@@ -11,13 +11,19 @@ namespace PSP_PoS.Components.Order
         public Guid Id { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        [Required]
         public Status OrderStatus { get; set; }
+
         public decimal Tip { get; set; }
+        
         public PaymentType PaymentType { get; set; }
 
+        [Required]
         [ForeignKey("Customer")]
         public Guid CustomerId { get; set; }
 
+        [Required]
         [ForeignKey("Employee")]
         public Guid EmployeeId { get; set; }
 
