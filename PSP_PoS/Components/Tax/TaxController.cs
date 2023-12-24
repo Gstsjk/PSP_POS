@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_PoS.Components.Tax;
+using System.ComponentModel;
+using System.Data.SqlTypes;
 
 namespace PSP_PoS.Components.Tax
 {
@@ -53,7 +55,7 @@ namespace PSP_PoS.Components.Tax
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateTax([FromRoute] string id, [FromBody] Tax updatedTax)
+        public IActionResult UpdateTax([FromRoute] string id, [FromBody] TaxDto updatedTaxDto)
         {
             if (!System.Guid.TryParse(id, out var taxId))
             {
@@ -66,11 +68,11 @@ namespace PSP_PoS.Components.Tax
             {
                 return NotFound();
             }
+            existingTax.Id = Guid.Parse(id);
+            existingTax.Name = updatedTaxDto.Name;
+            existingTax.Rate = updatedTaxDto.Rate;
 
-            existingTax.Name = updatedTax.Name;
-            existingTax.Rate = updatedTax.Rate;
-
-            _taxService.UpdateTax(existingTax);
+            _taxService.UpdateTax(updatedTaxDto);
 
             return NoContent();
         }

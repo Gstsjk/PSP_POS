@@ -22,16 +22,17 @@ namespace PSP_PoS.Components.Tax
             return _context.Taxes.FirstOrDefault(t => t.Id == taxId)!;
         }
 
-        public Tax AddTax(TaxDto tax)
+        public Tax AddTax(TaxDto taxDto)
         {
-            Tax taxModel = new Tax(tax);
-            _context.Taxes.Add(taxModel);
+            Tax tax = new Tax(taxDto);
+            _context.Taxes.Add(tax);
             _context.SaveChanges();
-            return taxModel;
+            return tax;
         }
 
-        public void UpdateTax(Tax tax)
+        public void UpdateTax(TaxDto taxDto)
         {
+            Tax tax = new Tax(taxDto);
             _context.Taxes.Update(tax);
             _context.SaveChanges();
         }
