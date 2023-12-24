@@ -23,5 +23,10 @@ namespace PSP_PoS.Components.Order
 
         [ForeignKey("TaxModel")]
         public Guid TaxId { get; set; }
+
+        public Order()
+        {
+
+        }
     }
 }

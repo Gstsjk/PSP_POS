@@ -17,6 +17,11 @@ namespace PSP_PoS.Components.Employee
         public WorkingDays WorkingDays { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+
+        public Employee()
+        {
+
+        }
     }
 
 

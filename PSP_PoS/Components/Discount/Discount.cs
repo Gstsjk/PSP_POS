@@ -13,5 +13,16 @@ namespace PSP_PoS.Components.Discount
         public DiscountType DiscountType { get; set; }
         [Required]
         public int Percentage { get; set; } // 0 - 100 %
+
+        public Discount()
+        {
+
+        }
+
+        public Discount(DiscountDto discountDto)
+        {
+            DiscountType = discountDto.DiscountType;
+            Percentage = discountDto.Percentage;
+        }
     }
 }

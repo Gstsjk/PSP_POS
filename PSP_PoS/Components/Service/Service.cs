@@ -24,5 +24,7 @@ namespace PSP_PoS.Components.Service
         [ForeignKey("Discount")]
         public Guid DiscountId { get; set; }
 
+
+        public Service() { }
     }
 }

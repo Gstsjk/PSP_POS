@@ -22,5 +22,7 @@ namespace PSP_PoS.Components.OrderItem
         public int Quantity { get; set; }
 
         public DateTime StartTime { get; set; }
+
+        public OrderItem() { }
     }
 }

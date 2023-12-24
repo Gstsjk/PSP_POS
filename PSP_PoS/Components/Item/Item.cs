@@ -19,5 +19,10 @@ namespace PSP_PoS.Components.Item
 
         [ForeignKey("Discount")]
         public Guid DiscountId { get; set; }
+
+        public Item()
+        {
+
+        }
     }
 }

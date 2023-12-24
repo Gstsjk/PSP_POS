@@ -19,5 +19,7 @@ namespace PSP_PoS.Components.Reservation
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
+
+        public Reservation() { }
     }
 }

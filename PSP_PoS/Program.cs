@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PSP_PoS.Components.Category;
+using PSP_PoS.Components.Discount;
 using PSP_PoS.Components.Tax;
 using PSP_PoS.Data;
 
@@ -10,6 +11,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<ITaxService, TaxService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IDiscountService, DiscountService>();
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {

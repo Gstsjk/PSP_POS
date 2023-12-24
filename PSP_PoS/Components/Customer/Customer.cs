@@ -14,5 +14,11 @@ namespace PSP_PoS.Components.Customer
         public string Email { get; set; }
 
         public string Password { get; set; }
+
+        public Customer()
+        {
+
+        }
     }
+
 }
