@@ -17,16 +17,16 @@ namespace PSP_PoS.Components.Category
         }
 
         [HttpPost]
-        public IActionResult AddCategory([FromBody] Category category)
+        public IActionResult AddCategory([FromBody] CategoryDto categoryDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _categoryService.AddCategory(category);
+            var category = _categoryService.AddCategory(categoryDto);
 
-            return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
+            return CreatedAtAction(nameof(AddCategory), category);
         }
 
         [HttpGet("{id}")]
@@ -55,7 +55,7 @@ namespace PSP_PoS.Components.Category
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] Category updatedCategory)
+        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] CategoryDto updatedCategoryDto)
         {
             if (!System.Guid.TryParse(id, out var categoryId))
             {
@@ -69,9 +69,9 @@ namespace PSP_PoS.Components.Category
                 return NotFound();
             }
 
-            existingCategory.Name = existingCategory.Name;
+            existingCategory.Name = updatedCategoryDto.Name;
               
-            _categoryService.UpdateCategory(existingCategory);
+            _categoryService.UpdateCategory(updatedCategoryDto, Guid.Parse(id));
 
             return NoContent();
         }

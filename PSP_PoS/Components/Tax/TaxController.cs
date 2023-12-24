@@ -17,16 +17,16 @@ namespace PSP_PoS.Components.Tax
         }
 
         [HttpPost]
-        public IActionResult AddTax([FromBody] TaxDto tax)
+        public IActionResult AddTax([FromBody] TaxDto taxDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             
-            var taxModel =_taxService.AddTax(tax);
+            var tax =_taxService.AddTax(taxDto);
 
-            return CreatedAtAction(nameof(AddTax), taxModel);
+            return CreatedAtAction(nameof(AddTax), tax);
         }
 
         [HttpGet("{id}")]
@@ -68,11 +68,10 @@ namespace PSP_PoS.Components.Tax
             {
                 return NotFound();
             }
-            existingTax.Id = Guid.Parse(id);
             existingTax.Name = updatedTaxDto.Name;
             existingTax.Rate = updatedTaxDto.Rate;
 
-            _taxService.UpdateTax(updatedTaxDto);
+            _taxService.UpdateTax(updatedTaxDto, Guid.Parse(id));
 
             return NoContent();
         }

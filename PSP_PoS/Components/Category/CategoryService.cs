@@ -15,19 +15,27 @@ namespace PSP_PoS.Components.Category
         {
             return _context.Categories.ToList();
         }
-        public Category GetCategoryById(Guid categoryId)
+        public Category? GetCategoryById(Guid categoryId)
         {
-            return _context.Categories.FirstOrDefault(t => t.Id == categoryId);
+            return _context.Categories.FirstOrDefault(t => t.Id == categoryId)!;
         }
-        public void AddCategory(Category category)
+        public Category AddCategory(CategoryDto categoryDto)
         { 
+            Category category = new Category(categoryDto);
             _context.Categories.Add(category);
             _context.SaveChanges();
+            return category;
         }
-        public void UpdateCategory(Category category)
+        public bool UpdateCategory(CategoryDto categoryDto, Guid id)
         {
+            var category = _context.Categories.FirstOrDefault(_t => _t.Id == id);
+            if (category == null)
+            {
+                return false;
+            }
             _context.Categories.Update(category);
             _context.SaveChanges();
+            return true;
         }
 
         public void DeleteCategory(Guid categoryId)

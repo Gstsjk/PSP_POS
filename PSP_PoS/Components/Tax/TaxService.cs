@@ -1,5 +1,4 @@
-﻿
-using PSP_PoS.Data;
+﻿using PSP_PoS.Data;
 
 namespace PSP_PoS.Components.Tax
 {
@@ -17,9 +16,9 @@ namespace PSP_PoS.Components.Tax
             return _context.Taxes.ToList();
         }
 
-        public Tax GetTaxById(Guid taxId)
+        public Tax? GetTaxById(Guid taxId)
         {
-            return _context.Taxes.FirstOrDefault(t => t.Id == taxId)!;
+            return _context.Taxes.FirstOrDefault(t => t.Id == taxId);
         }
 
         public Tax AddTax(TaxDto taxDto)
@@ -30,11 +29,16 @@ namespace PSP_PoS.Components.Tax
             return tax;
         }
 
-        public void UpdateTax(TaxDto taxDto)
+        public bool UpdateTax(TaxDto taxDto, Guid id)
         {
-            Tax tax = new Tax(taxDto);
+            var tax = _context.Taxes.FirstOrDefault(_t => _t.Id == id);
+            if(tax == null)
+            {
+                return false;
+            }
             _context.Taxes.Update(tax);
             _context.SaveChanges();
+            return true;
         }
 
         public void DeleteTax(Guid taxId)
