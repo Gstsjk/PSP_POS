@@ -2,7 +2,7 @@
 
 namespace PSP_PoS.Components.Employee
 {
-    public interface IEmployeeServiceInterface
+    public interface IEmployeeService
     {
         //public void CreateNewEmployee(EmployeeModel employee);
 

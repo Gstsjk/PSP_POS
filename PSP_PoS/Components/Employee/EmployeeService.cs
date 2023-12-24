@@ -4,7 +4,7 @@ using PSP_PoS.Data;
 
 namespace PSP_PoS.Components.Employee
 {
-    public class EmployeeService : IEmployeeServiceInterface
+    public class EmployeeService : IEmployeeService
     {
         DataContext _dataContext;
 
