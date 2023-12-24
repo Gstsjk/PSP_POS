@@ -2,7 +2,7 @@
 
 namespace PSP_PoS.Components.DiscountComponent
 {
-    [Route("api/discounts")]
+    [Route("api/[controller]")]
     [ApiController]
     public class DiscountController : ControllerBase
     {

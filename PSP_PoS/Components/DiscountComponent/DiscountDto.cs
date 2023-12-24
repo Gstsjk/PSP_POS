@@ -1,5 +1,4 @@
 ﻿using PSP_PoS.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace PSP_PoS.Components.DiscountComponent
 {

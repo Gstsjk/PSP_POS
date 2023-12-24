@@ -5,7 +5,7 @@ using System.Data.SqlTypes;
 
 namespace PSP_PoS.Components.TaxComponent
 {
-    [Route("api/taxes")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TaxController : ControllerBase
     {

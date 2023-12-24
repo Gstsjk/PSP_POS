@@ -67,6 +67,5 @@ namespace PSP_PoS.Components.DiscountComponent
             _context.SaveChanges();
             return true;
         }
-
     }
 }

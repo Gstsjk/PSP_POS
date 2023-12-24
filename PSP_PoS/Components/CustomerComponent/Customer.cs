@@ -1,5 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using PSP_PoS.Components.CategoryComponent;
+using PSP_PoS.Components.DiscountComponent;
+using PSP_PoS.Components.ItemComponent;
+using Microsoft.EntityFrameworkCore;
 
 namespace PSP_PoS.Components.CustomerComponent
 {
@@ -11,7 +15,7 @@ namespace PSP_PoS.Components.CustomerComponent
 
         [Required]
         public string Name { get; set; }
-        
+
         [Required]
         public string Surname { get; set; }
 
@@ -25,6 +29,21 @@ namespace PSP_PoS.Components.CustomerComponent
         {
 
         }
-    }
 
+        public Customer(CustomerDto customer)
+        {
+            Name = customer.Name;
+            Surname = customer.Surname;
+            Email = customer.Email;
+            Password = customer.Password;
+        }
+
+        public void UpdateCustomer(CustomerDto customerDto)
+        {
+            Name = customerDto.Name;
+            Surname = customerDto.Surname;
+            Email = customerDto.Email;
+            Password = customerDto.Password;
+        }
+    }
 }
