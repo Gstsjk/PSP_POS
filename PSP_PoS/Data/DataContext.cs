@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PSP_PoS.Components.Category;
-using PSP_PoS.Components.Customer;
-using PSP_PoS.Components.Discount;
-using PSP_PoS.Components.Employee;
-using PSP_PoS.Components.Item;
-using PSP_PoS.Components.Order;
-using PSP_PoS.Components.OrderItem;
-using PSP_PoS.Components.Reservation;
-using PSP_PoS.Components.Service;
-using PSP_PoS.Components.Tax;
+using PSP_PoS.Components.CategoryComponent;
+using PSP_PoS.Components.CustomerComponent;
+using PSP_PoS.Components.DiscountComponent;
+using PSP_PoS.Components.EmployeeComponent;
+using PSP_PoS.Components.ItemComponent;
+using PSP_PoS.Components.OrderComponent;
+using PSP_PoS.Components.OrderItemComponent;
+using PSP_PoS.Components.ReservationComponent;
+using PSP_PoS.Components.ServiceComponent;
+using PSP_PoS.Components.TaxComponent;
 
 namespace PSP_PoS.Data
 {
