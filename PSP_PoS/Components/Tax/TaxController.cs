@@ -15,17 +15,16 @@ namespace PSP_PoS.Components.Tax
         }
 
         [HttpPost]
-        public IActionResult AddTax([FromBody] Tax tax)
+        public IActionResult AddTax([FromBody] TaxDto tax)
         {
-            Console.WriteLine(tax.Id);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             
-            _taxService.AddTax(tax);
+            var taxModel =_taxService.AddTax(tax);
 
-            return CreatedAtAction(nameof(GetTaxById), new { id = tax.Id }, tax);
+            return CreatedAtAction(nameof(AddTax), taxModel);
         }
 
         [HttpGet("{id}")]

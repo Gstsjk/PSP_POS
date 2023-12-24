@@ -4,7 +4,7 @@
     {
         List<Tax> GetAllTaxes();
         Tax GetTaxById(Guid taxId);
-        void AddTax(Tax tax);
+        Tax AddTax(TaxDto tax);
         void UpdateTax(Tax tax);
         void DeleteTax(Guid taxId);
     }

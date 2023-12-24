@@ -19,13 +19,15 @@ namespace PSP_PoS.Components.Tax
 
         public Tax GetTaxById(Guid taxId)
         {
-            return _context.Taxes.FirstOrDefault(t => t.Id == taxId);
+            return _context.Taxes.FirstOrDefault(t => t.Id == taxId)!;
         }
 
-        public void AddTax(Tax tax)
+        public Tax AddTax(TaxDto tax)
         {
-            _context.Taxes.Add(tax);
+            Tax taxModel = new Tax(tax);
+            _context.Taxes.Add(taxModel);
             _context.SaveChanges();
+            return taxModel;
         }
 
         public void UpdateTax(Tax tax)
