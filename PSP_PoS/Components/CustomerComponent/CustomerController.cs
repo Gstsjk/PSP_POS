@@ -23,9 +23,9 @@ namespace PSP_PoS.Components.CustomerComponent
                 return BadRequest(ModelState);
             }
 
-            Customer discount = _customerService.AddCustomer(customerDto);
+            Customer customer = _customerService.AddCustomer(customerDto);
 
-            return CreatedAtAction(nameof(AddCustomer), discount);
+            return CreatedAtAction(nameof(AddCustomer), customer);
         }
 
 
