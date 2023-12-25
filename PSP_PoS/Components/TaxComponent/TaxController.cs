@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PSP_PoS.Components.DiscountComponent;
 using PSP_PoS.Components.TaxComponent;
 using System.ComponentModel;
 using System.Data.SqlTypes;
@@ -55,25 +56,22 @@ namespace PSP_PoS.Components.TaxComponent
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateTax([FromRoute] string id, [FromBody] TaxDto updatedTaxDto)
+        public IActionResult UpdateTax([FromRoute] string id, [FromBody] TaxDto taxDto)
         {
             if (!System.Guid.TryParse(id, out var taxId))
             {
                 return BadRequest("Invalid tax ID format");
             }
 
-            var existingTax = _taxService.GetTaxById(taxId);
-
-            if (existingTax == null)
+            if (_taxService.UpdateTax(taxDto, taxId))
             {
-                return NotFound();
+                return StatusCode(201);
+                //return Ok();
             }
-            existingTax.Name = updatedTaxDto.Name;
-            existingTax.Rate = updatedTaxDto.Rate;
-
-            _taxService.UpdateTax(updatedTaxDto, Guid.Parse(id));
-
-            return NoContent();
+            else
+            {
+                return BadRequest("Record not found.");
+            }
         }
 
         [HttpDelete("{id}")]

@@ -31,11 +31,15 @@ namespace PSP_PoS.Components.TaxComponent
 
         public bool UpdateTax(TaxDto taxDto, Guid id)
         {
-            var tax = _context.Taxes.FirstOrDefault(_t => _t.Id == id);
+            Tax? tax = _context.Taxes.Find(id);
+
             if(tax == null)
             {
                 return false;
             }
+            tax.Name = taxDto.Name;
+            tax.Rate = taxDto.Rate;
+
             _context.Taxes.Update(tax);
             _context.SaveChanges();
             return true;

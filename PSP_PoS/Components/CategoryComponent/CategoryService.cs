@@ -28,11 +28,14 @@ namespace PSP_PoS.Components.CategoryComponent
         }
         public bool UpdateCategory(CategoryDto categoryDto, Guid id)
         {
-            var category = _context.Categories.FirstOrDefault(_t => _t.Id == id);
+            Category? category = _context.Categories.Find(id);
             if (category == null)
             {
                 return false;
             }
+
+            category.Name = categoryDto.Name;
+
             _context.Categories.Update(category);
             _context.SaveChanges();
             return true;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_PoS.Components.CategoryComponent;
+using PSP_PoS.Components.DiscountComponent;
 
 
 namespace PSP_PoS.Components.CategoryComponent
@@ -55,25 +56,22 @@ namespace PSP_PoS.Components.CategoryComponent
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] CategoryDto updatedCategoryDto)
+        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] CategoryDto categoryDto)
         {
             if (!System.Guid.TryParse(id, out var categoryId))
             {
                 return BadRequest("Invalid category ID format");
             }
 
-            var existingCategory = _categoryService.GetCategoryById(categoryId);
-
-            if (existingCategory == null)
+            if (_categoryService.UpdateCategory(categoryDto, categoryId))
             {
-                return NotFound();
+                return StatusCode(201);
+                //return Ok();
             }
-
-            existingCategory.Name = updatedCategoryDto.Name;
-              
-            _categoryService.UpdateCategory(updatedCategoryDto, Guid.Parse(id));
-
-            return NoContent();
+            else
+            {
+                return BadRequest("Record not found.");
+            }
         }
 
         [HttpDelete("{id}")]
