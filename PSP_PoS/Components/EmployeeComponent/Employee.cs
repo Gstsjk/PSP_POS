@@ -28,16 +28,39 @@ namespace PSP_PoS.Components.EmployeeComponent
         [Required]
         public WorkingDays WorkingDays { get; set; }
 
-        [Required]
-        public TimeSpan StartTime { get; set; }
+        public int StartTime { get; set; }
 
-        [Required]
-        public TimeSpan EndTime { get; set; }
+        public int EndTime { get; set; }
 
         public Employee()
         {
 
         }
+
+        public Employee(EmployeeDto employee)
+        {
+            Username = employee.Username;
+            Password = employee.Password;
+            Name = employee.Name;
+            Surname = employee.Surname;
+            Privileges = employee.Privileges;
+            WorkingDays = employee.WorkingDays;
+            StartTime = employee.StartTime.Hours*60+employee.StartTime.Minutes;
+            EndTime = employee.EndTime.Hours*60+employee.StartTime.Minutes;
+        }
+
+        public void UpdateEmployee(EmployeeDto employee)
+        {
+            Username = employee.Username;
+            Password = employee.Password;
+            Name = employee.Name;
+            Surname = employee.Surname;
+            Privileges = employee.Privileges;
+            WorkingDays = employee.WorkingDays;
+            StartTime = employee.StartTime.Hours * 60 + employee.StartTime.Minutes;
+            EndTime = employee.EndTime.Hours * 60 + employee.StartTime.Minutes;
+        }
+
     }
 
 

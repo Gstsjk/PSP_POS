@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PSP_PoS.Components.DiscountComponent;
 
 namespace PSP_PoS.Components.CustomerComponent
 {

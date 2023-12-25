@@ -1,4 +1,5 @@
-﻿using PSP_PoS.Components.EmployeeComponent;
+﻿using PSP_PoS.Components.CustomerComponent;
+using PSP_PoS.Components.EmployeeComponent;
 using PSP_PoS.Components.TaxComponent;
 using PSP_PoS.Data;
 
@@ -6,48 +7,68 @@ namespace PSP_PoS.Components.EmployeeComponent
 {
     public class EmployeeService : IEmployeeService
     {
-        DataContext _dataContext;
+        private readonly DataContext _context;
 
         public EmployeeService(DataContext context)
         {
-            _dataContext = context;
+            _context = context;
         }
 
-        public bool CreateNewEmployee(Employee employee)
+        public List<EmployeeWithIdDto> GetEmployees()
         {
-            // validacija ar viskas ok
-            _dataContext.Employees.Add(employee);
-            return _dataContext.SaveChanges() == 1 ? true : false;
+            var employees = _context.Employees.ToList();
+            List<EmployeeWithIdDto> employeeWithIdDtos = employees.Select(e => new EmployeeWithIdDto(e)).ToList();
+            return employeeWithIdDtos;
         }
 
-        public Employee GetEmployeeById(Guid id)
+        public EmployeeWithIdDto? GetEmployeeById(Guid id)
         {
-            return _dataContext.Employees.Find(id);
-            //_dataContext.Employees.FirstOrDefault(x => x.Id == id);
-        }
+            Employee? employee = _context.Employees.Find(id);
 
-        public Employee GetEmployeeByUsername(string username)
-        {
-            Employee employee = _dataContext.Employees.FirstOrDefault(x => x.Username == username);
             if (employee == null)
             {
                 return null;
             }
+            EmployeeWithIdDto employeeWithIdDto = new EmployeeWithIdDto(employee);
+            return employeeWithIdDto;
+        }
+
+        public Employee AddEmployee(EmployeeDto employeeDto)
+        {
+            Employee employee = new Employee(employeeDto);
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
 
             return employee;
         }
 
-        public bool UpdateEmployee(Employee employee)
+        public bool UpdateEmployee(EmployeeDto employeeDto, Guid id)
         {
-            _dataContext.Employees.Update(employee);
-            return _dataContext.SaveChanges() == 1 ? true : false;
+            Employee? employee = _context.Employees.Find(id);
+
+            if (employee == null)
+            {
+                return false;
+            }
+
+            employee.UpdateEmployee(employeeDto);
+
+            _context.Employees.Update(employee);
+            _context.SaveChanges();
+            return true;
         }
 
-        public bool DeleteEmployee(Employee employee)
+        public bool DeleteEmployee(Guid id)
         {
-            _dataContext.Employees.Remove(employee);
-            return _dataContext.SaveChanges() == 1 ? true : false;
-        }
+            Employee? employee = _context.Employees.Find(id);
+            if (employee == null)
+            {
+                return false;
+            }
 
+            _context.Employees.Remove(employee);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

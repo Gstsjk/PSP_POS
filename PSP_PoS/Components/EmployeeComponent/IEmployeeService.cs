@@ -1,17 +1,18 @@
-﻿using PSP_PoS.Components.EmployeeComponent;
+﻿using PSP_PoS.Components.CustomerComponent;
+using PSP_PoS.Components.EmployeeComponent;
 
 namespace PSP_PoS.Components.EmployeeComponent
 {
     public interface IEmployeeService
     {
-        //public void CreateNewEmployee(EmployeeModel employee);
+        public List<EmployeeWithIdDto> GetEmployees();
 
-        //public EmployeeModel GetEmployeeById(Guid id);
+        public EmployeeWithIdDto? GetEmployeeById(Guid id);
 
-        //public EmployeeModel GetEmployeeByUsername(string username);
+        public Employee AddEmployee(EmployeeDto employeeDto);
 
-        //public bool UpdateEmployee(EmployeeModel employee);
+        public bool UpdateEmployee(EmployeeDto employeeDto, Guid id);
 
-        //public bool DeleteEmployee(EmployeeModel employee);
+        public bool DeleteEmployee(Guid id);
     }
 }
