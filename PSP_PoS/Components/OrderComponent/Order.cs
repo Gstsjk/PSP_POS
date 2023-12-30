@@ -38,5 +38,18 @@ namespace PSP_PoS.Components.OrderComponent
 
         [ForeignKey("TaxId")]
         public Tax? Tax { get; set; }
+
+        public Order()
+        {
+
+        }
+
+        public Order(OrderCreateDto orderCreateDto)
+        {
+            EmployeeId = orderCreateDto.EmployeeId;
+            CustomerId = orderCreateDto.CustomerId;
+            DateCreated = DateTime.Now;
+            OrderStatus = Status.Initial;
+        }
     }
 }
