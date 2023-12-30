@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PSP_PoS.Components.CategoryComponent;
 
 namespace PSP_PoS.Components.CustomerComponent
 {
-
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class CustomerController : Controller
     {
         private readonly ICustomerService _customerService;
 
@@ -14,19 +14,12 @@ namespace PSP_PoS.Components.CustomerComponent
             _customerService = customerService;
         }
 
-        [HttpPost]
-        public IActionResult AddCustomer([FromBody] CustomerDto customerDto)
+        [HttpGet]
+        public IActionResult GetAllCustomers()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Customer customer = _customerService.AddCustomer(customerDto);
-
-            return CreatedAtAction(nameof(AddCustomer), customer);
+            var customerReadDto = _customerService.GetAllCustomers();
+            return Ok(customerReadDto);
         }
-
 
         [HttpGet("{id}")]
         public IActionResult GetCustomerById([FromRoute] string id)
@@ -35,73 +28,55 @@ namespace PSP_PoS.Components.CustomerComponent
             {
                 return BadRequest("Invalid customer ID format");
             }
-
             var customer = _customerService.GetCustomerById(customerId);
-
-            if (customer == null)
+            if(customer == null)
             {
                 return NotFound();
             }
-
             return Ok(customer);
         }
 
-        [HttpGet("email/{email}")]
-        public IActionResult GetCustomerByEmail([FromRoute] string email)
+        [HttpPost]
+        public IActionResult AddCustomer([FromBody] CustomerCreateDto customerCreateDto)
         {
-            var customer = _customerService.GetCustomerByEmail(email);
-
-            if (customer == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
-
-            return Ok(customer);
-        }
-
-        [HttpGet]
-        public IActionResult GetCustomers()
-        {
-            var customers = _customerService.GetCustomers();
-            return Ok(customers);
+            var customer = _customerService.AddCustomer(customerCreateDto);
+            return CreatedAtAction(nameof(AddCustomer), customer);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCustomer([FromRoute] string id,[FromBody] CustomerDto customerDto)
+        public IActionResult UpdateCustomer([FromRoute] string id, [FromBody] CustomerCreateDto customerCreateDto)
         {
             if (!System.Guid.TryParse(id, out var customerId))
             {
                 return BadRequest("Invalid customer ID format");
             }
-
-            if (_customerService.UpdateCustomer(customerDto, customerId))
-            {
-                return StatusCode(201);
-                //return Ok();
-            }
-            else
-            {
-                return BadRequest("Record not found.");
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteDiscount([FromRoute] string id)
-        {
-            if (!System.Guid.TryParse(id, out var customerId))
-            {
-                return BadRequest("Invalid customer ID format");
-            }
-
-
-            if (_customerService.DeleteCustomer(customerId))
+            if(_customerService.UpdateCustomer(customerCreateDto, customerId))
             {
                 return Ok();
             }
             else
             {
-                return BadRequest("Record not found.");
+                return BadRequest("Record not found");
             }
+        }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCustomer([FromRoute] string id)
+        {
+            if (!System.Guid.TryParse(id, out var customerId))
+            {
+                return BadRequest("Invalid customer ID format");
+            }
+            var customer = _customerService.GetCustomerById(customerId);
+            if(customer == null)
+            {
+                return NotFound();
+            }
+            _customerService.DeleteCustomer(customerId);
+            return NoContent();
         }
     }
 }

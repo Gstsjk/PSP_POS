@@ -11,29 +11,41 @@ namespace PSP_PoS.Components.CategoryComponent
             _context = context;
         }
 
-        public List<Category> GetAllCategories()
+        public List<CategoryReadDto> GetAllCategories()
         {
-            return _context.Categories.ToList();
+            List<Category> categories = _context.Categories.ToList();
+            List<CategoryReadDto> categoryReadDtos = new List<CategoryReadDto>();
+
+            foreach (var category in categories)
+            {
+                CategoryReadDto categoryReadDto = new CategoryReadDto(category);
+                categoryReadDtos.Add(categoryReadDto);
+            }
+            return categoryReadDtos;
         }
-        public Category? GetCategoryById(Guid categoryId)
+
+        public CategoryReadDto GetCategoryById(Guid categoryId)
         {
-            return _context.Categories.FirstOrDefault(t => t.Id == categoryId)!;
+            var category = _context.Categories.FirstOrDefault(t => t.Id == categoryId)!;
+            CategoryReadDto categoryRead = new CategoryReadDto(category);
+            return categoryRead;
         }
-        public Category AddCategory(CategoryDto categoryDto)
-        { 
-            Category category = new Category(categoryDto);
+
+        public Category AddCategory(CategoryCreateDto categoryCreateDto)
+        {
+            Category category = new Category(categoryCreateDto);
             _context.Categories.Add(category);
             _context.SaveChanges();
             return category;
         }
-        public bool UpdateCategory(CategoryDto categoryDto, Guid id)
+
+        public bool UpdateCategory(CategoryCreateDto categoryDto, Guid id)
         {
             Category? category = _context.Categories.Find(id);
             if (category == null)
             {
                 return false;
             }
-
             category.Name = categoryDto.Name;
 
             _context.Categories.Update(category);
@@ -44,7 +56,6 @@ namespace PSP_PoS.Components.CategoryComponent
         public void DeleteCategory(Guid categoryId)
         {
             var category = _context.Categories.FirstOrDefault(t => t.Id == categoryId);
-
             if (category != null)
             {
                 _context.Categories.Remove(category);

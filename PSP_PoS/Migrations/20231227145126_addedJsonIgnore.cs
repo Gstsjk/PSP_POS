@@ -5,7 +5,7 @@
 namespace PSP_PoS.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedEmployeeTimeSpan : Migration
+    public partial class addedJsonIgnore : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PSP_PoS.Data;
+﻿using PSP_PoS.Data;
+using System.Reflection.Metadata.Ecma335;
 
 namespace PSP_PoS.Components.DiscountComponent
 {
@@ -12,60 +12,52 @@ namespace PSP_PoS.Components.DiscountComponent
             _context = context;
         }
 
-        public List<Discount> GetDiscounts()
+        public List<DiscountReadDto> GetAllDiscounts()
         {
-            return _context.Discounts.Where(x => true).ToList();
-        }
+            List<Discount> discounts = _context.Discounts.ToList();
+            List<DiscountReadDto> discountReadDtos = new List<DiscountReadDto>();
 
-        public Discount? GetDiscountById(Guid id)
-        {
-            Discount? discount = _context.Discounts.Find(id);
-
-            if(discount == null)
+            foreach (var discount in discounts) 
             {
-                return null;
+                DiscountReadDto discountReadDto = new DiscountReadDto(discount);
+                discountReadDtos.Add(discountReadDto);
             }
-
-            return discount;
+            return discountReadDtos;
         }
-        
-        public Discount AddDiscount(DiscountDto discountDto)
+        public Discount GetDiscountById(Guid discountId)
         {
-            Discount discount = new Discount(discountDto);
+            return _context.Discounts.FirstOrDefault(t => t.Id == discountId)!;
+        }
+
+        public Discount AddDiscount(DiscountCreateDto discountCreateDto)
+        {
+            Discount discount = new Discount(discountCreateDto);
             _context.Discounts.Add(discount);
             _context.SaveChanges();
-            
             return discount;
         }
-
-        public bool UpdateDiscount(DiscountDto discountDto, Guid id)
+        public bool UpdateDiscount(DiscountCreateDto discountCreateDto, Guid id)
         {
             Discount? discount = _context.Discounts.Find(id);
-
             if (discount == null)
             {
                 return false;
             }
-
-            discount.Percentage = discountDto.Percentage;
-            discount.DiscountType = discountDto.DiscountType;
+            discount.DiscountType = discountCreateDto.DiscountType;
+            discount.Percentage = discountCreateDto.Percentage;
 
             _context.Discounts.Update(discount);
             _context.SaveChanges();
             return true;
         }
-
-        public bool DeleteDiscount(Guid id)
+        public void DeleteDiscount(Guid discountId)
         {
-            Discount? discount = _context.Discounts.Find(id);
-            if (discount == null)
+            var discount = _context.Discounts.FirstOrDefault(t => t.Id == discountId);
+            if (discount != null)
             {
-                return false;
+                _context.Discounts.Remove(discount);
+                _context.SaveChanges();
             }
-
-            _context.Discounts.Remove(discount);
-            _context.SaveChanges();
-            return true;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.Xml;
 
 namespace PSP_PoS.Components.DiscountComponent
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DiscountController : ControllerBase
+    public class DiscountController : Controller
     {
         private readonly IDiscountService _discountService;
 
@@ -13,81 +14,72 @@ namespace PSP_PoS.Components.DiscountComponent
             _discountService = discountService;
         }
 
+        [HttpGet]
+        public IActionResult GetAllDiscounts()
+        {
+            var discountReadDto = _discountService.GetAllDiscounts();
+            return Ok(discountReadDto);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetDiscountById([FromRoute] string id)
+        {
+            if (!System.Guid.TryParse(id, out var discountId))
+            {
+                return BadRequest("Invalid discount ID format");
+            }
+
+            var discount = _discountService.GetDiscountById(discountId);
+            if(discount == null)
+            {
+                return NotFound();
+            }
+            return Ok(discount);
+        }
+
         [HttpPost]
-        public IActionResult AddDiscount([FromBody] DiscountDto discountDto)
+        public IActionResult AddDiscount([FromBody] DiscountCreateDto discountCreateDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            Discount discount = _discountService.AddDiscount(discountDto);
-
+            var discount = _discountService.AddDiscount(discountCreateDto);
             return CreatedAtAction(nameof(AddDiscount), discount);
         }
 
-
-        [HttpGet("{id}")]
-        public IActionResult GetDiscountById([FromRoute] string id)
-        {
-            if (!System.Guid.TryParse(id, out var taxId))
-            {
-                return BadRequest("Invalid tax ID format");
-            }
-
-            var discount = _discountService.GetDiscountById(taxId);
-
-            if (discount == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(discount);
-        }
-
-        [HttpGet]
-        public IActionResult GetDiscounts()
-        {
-            var discounts = _discountService.GetDiscounts();
-            return Ok(discounts);
-        }
-
         [HttpPut("{id}")]
-        public IActionResult UpdateDiscount([FromRoute] string id, [FromBody] DiscountDto discountDto)
+        public IActionResult UpdateDiscount([FromRoute] string id, [FromBody] DiscountCreateDto discountCreateDto)
         {
-            if (!System.Guid.TryParse(id, out var discountId))
+            if(!System.Guid.TryParse (id, out var discountId))
             {
-                return BadRequest("Invalid tax ID format");
+                return BadRequest("Invalid discount ID format");
             }
 
-            if(_discountService.UpdateDiscount(discountDto, discountId))
+            if(_discountService.UpdateDiscount(discountCreateDto, discountId))
             {
-                return StatusCode(201);
-                //return Ok();
+                return Ok();
             }
             else
             {
-                return BadRequest("Record not found.");
+                return BadRequest("Record not found");
             }
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteDiscount([FromRoute] string id)
         {
-            if (!System.Guid.TryParse(id, out var discountId))
+            if(!System.Guid.TryParse(id, out var discountId))
             {
-                return BadRequest("Invalid tax ID format");
+                return BadRequest("Invalid discount ID format");
             }
-
-
-            if (_discountService.DeleteDiscount(discountId))
+            var discount = _discountService.GetDiscountById(discountId);
+            if(discount == null)
             {
-                return Ok();
+                return NotFound();
             }
-            else
-            {
-                return BadRequest("Record not found.");
-            }
+            _discountService.DeleteDiscount(discountId);
+            return NoContent();
         }
     }
 }

@@ -1,6 +1,9 @@
-﻿using PSP_PoS.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using PSP_PoS.Enums;
+using PSP_PoS.Components.CustomerComponent;
+using PSP_PoS.Components.EmployeeComponent;
+using PSP_PoS.Components.TaxComponent;
 
 namespace PSP_PoS.Components.OrderComponent
 {
@@ -16,23 +19,24 @@ namespace PSP_PoS.Components.OrderComponent
         public Status OrderStatus { get; set; }
 
         public decimal Tip { get; set; }
-        
+
         public PaymentType PaymentType { get; set; }
 
         [Required]
-        [ForeignKey("Customer")]
         public Guid CustomerId { get; set; }
 
+        [ForeignKey("CustomerId")]
+        public Customer Customer { get; set; }
+
         [Required]
-        [ForeignKey("Employee")]
         public Guid EmployeeId { get; set; }
 
-        [ForeignKey("TaxModel")]
-        public Guid TaxId { get; set; }
+        [ForeignKey("EmployeeId")]
+        public Employee Employee { get; set; }
 
-        public Order()
-        {
+        public Guid? TaxId {  get; set; }
 
-        }
+        [ForeignKey("TaxId")]
+        public Tax? Tax { get; set; }
     }
 }

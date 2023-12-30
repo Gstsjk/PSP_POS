@@ -1,15 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using PSP_PoS.Components.CategoryComponent;
-using PSP_PoS.Components.CustomerComponent;
-using PSP_PoS.Components.DiscountComponent;
-using PSP_PoS.Components.EmployeeComponent;
-using PSP_PoS.Components.ItemComponent;
-using PSP_PoS.Components.OrderComponent;
-using PSP_PoS.Components.OrderItemComponent;
-using PSP_PoS.Components.ReservationComponent;
-using PSP_PoS.Components.ServiceComponent;
-using PSP_PoS.Components.TaxComponent;
 using PSP_PoS.Data;
+using PSP_PoS.Components;
+using PSP_PoS.Components.DiscountComponent;
+using PSP_PoS.Components.ItemComponent;
+using PSP_PoS.Components.CustomerComponent;
+using PSP_PoS.Components.EmployeeComponent;
+using PSP_PoS.Components.ServiceComponent;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,11 +18,11 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IOrderItemService, OrderItemService>();
-builder.Services.AddScoped<IReservationService, ReservationService>();
+//builder.Services.AddScoped<IOrderService, OrderService>();
+//builder.Services.AddScoped<IOrderItemService, OrderItemService>();
+//builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
-builder.Services.AddScoped<ITaxService, TaxService>();
+//builder.Services.AddScoped<ITaxService, TaxService>();
 
 
 builder.Services.AddEndpointsApiExplorer();

@@ -1,13 +1,11 @@
-﻿using PSP_PoS.Components.TaxComponent;
-
-namespace PSP_PoS.Components.CategoryComponent
+﻿namespace PSP_PoS.Components.CategoryComponent
 {
     public interface ICategoryService
     {
-        List<Category> GetAllCategories();
-        Category? GetCategoryById(Guid categoryId);
-        Category AddCategory(CategoryDto category);
-        bool UpdateCategory(CategoryDto category, Guid id);
+        List<CategoryReadDto> GetAllCategories();
+        CategoryReadDto GetCategoryById(Guid categoryId);
+        Category AddCategory(CategoryCreateDto categoryCreateDto);
+        bool UpdateCategory(CategoryCreateDto categoryCreateDto, Guid id);
         void DeleteCategory(Guid categoryId);
     }
 }

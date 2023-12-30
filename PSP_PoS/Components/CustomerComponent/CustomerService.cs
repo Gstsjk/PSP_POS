@@ -1,5 +1,4 @@
 ﻿using PSP_PoS.Components.CategoryComponent;
-using PSP_PoS.Components.DiscountComponent;
 using PSP_PoS.Data;
 
 namespace PSP_PoS.Components.CustomerComponent
@@ -13,71 +12,50 @@ namespace PSP_PoS.Components.CustomerComponent
             _context = context;
         }
 
-        public List<Customer> GetCustomers()
+        public List<CustomerReadDto> GetAllCustomers()
         {
-            return _context.Customers.Where(x => true).ToList();
-        }
+            List<Customer> customers = _context.Customers.ToList();
+            List<CustomerReadDto> customerReadDtos = new List<CustomerReadDto>();
 
-        public Customer? GetCustomerById(Guid id)
-        {
-            Customer? customer = _context.Customers.Find(id);
-
-            if (customer == null)
+            foreach (var customer in customers)
             {
-                return null;
+                CustomerReadDto customerReadDto = new CustomerReadDto(customer);
+                customerReadDtos.Add(customerReadDto);
             }
-
-            return customer;
+            return customerReadDtos;
         }
 
-        public Customer? GetCustomerByEmail(string email)
+        public Customer GetCustomerById(Guid customerId)
         {
-            Customer? customer = _context.Customers.FirstOrDefault(x => x.Email == email);
-
-            if (customer == null)
-            {
-                return null;
-            }
-
-            return customer;
+            return _context.Customers.FirstOrDefault(t => t.Id == customerId)!;
         }
 
-        public Customer AddCustomer(CustomerDto customerDto)
+        public Customer AddCustomer(CustomerCreateDto customerCreateDto)
         {
-            Customer customer = new Customer(customerDto);
+            Customer customer = new Customer(customerCreateDto);
             _context.Customers.Add(customer);
             _context.SaveChanges();
-
             return customer;
         }
-
-        public bool UpdateCustomer(CustomerDto customerDto, Guid id)
+        public bool UpdateCustomer(CustomerCreateDto customerCreateDto, Guid id)
         {
             Customer? customer = _context.Customers.Find(id);
-
-            if (customer == null)
+            if(customer == null)
             {
                 return false;
             }
-
-            customer.UpdateCustomer(customerDto);
-
-            _context.Customers.Update(customer);
+            customer.UpdateCustomer(customerCreateDto);
             _context.SaveChanges();
             return true;
         }
-
-        public bool DeleteCustomer(Guid id)
+        public void DeleteCustomer(Guid customerId)
         {
-            Customer? customer = _context.Customers.Find(id);
-            if (customer == null)
+            var customer = _context.Customers.FirstOrDefault(t => t.Id == customerId);
+            if(customer != null)
             {
-                return false;
+                _context.Customers.Remove(customer);
+                _context.SaveChanges();
             }
-
-            _context.Customers.Remove(customer);
-            _context.SaveChanges();
-            return true;
         }
     }
 }

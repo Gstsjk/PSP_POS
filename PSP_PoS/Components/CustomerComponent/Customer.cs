@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PSP_PoS.Components.CategoryComponent;
-using PSP_PoS.Components.DiscountComponent;
 using PSP_PoS.Components.ItemComponent;
-using Microsoft.EntityFrameworkCore;
+using PSP_PoS.Components.ServiceComponent;
+using System.Text.Json.Serialization;
+using PSP_PoS.Components.OrderComponent;
+using PSP_PoS.Components.CategoryComponent;
 
 namespace PSP_PoS.Components.CustomerComponent
 {
@@ -25,25 +26,29 @@ namespace PSP_PoS.Components.CustomerComponent
         [Required]
         public string Password { get; set; }
 
+        //Navigation
+        [JsonIgnore]
+        public List<Order> Orders { get; set; }
+
         public Customer()
         {
 
         }
 
-        public Customer(CustomerDto customer)
+        public Customer(CustomerCreateDto customerCreateDto)
         {
-            Name = customer.Name;
-            Surname = customer.Surname;
-            Email = customer.Email;
-            Password = customer.Password;
+            Name = customerCreateDto.Name;
+            Surname = customerCreateDto.Surname;
+            Email = customerCreateDto.Email;
+            Password = customerCreateDto.Password;
         }
-
-        public void UpdateCustomer(CustomerDto customerDto)
+        public void UpdateCustomer(CustomerCreateDto customerCreateDto)
         {
-            Name = customerDto.Name;
-            Surname = customerDto.Surname;
-            Email = customerDto.Email;
-            Password = customerDto.Password;
+            Name = customerCreateDto.Name;
+            Surname = customerCreateDto.Surname;
+            Surname = customerCreateDto.Email;
+            Email = customerCreateDto.Email;
+            Password = customerCreateDto.Password;
         }
     }
 }

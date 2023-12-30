@@ -11,8 +11,8 @@ using PSP_PoS.Data;
 namespace PSP_PoS.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231225123446_EmployeeWorkingToInt")]
-    partial class EmployeeWorkingToInt
+    [Migration("20231228143247_addedOtherModels")]
+    partial class addedOtherModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,10 +128,9 @@ namespace PSP_PoS.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("DiscountId")
+                    b.Property<Guid?>("DiscountId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -145,6 +144,10 @@ namespace PSP_PoS.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DiscountId");
 
                     b.ToTable("Items");
                 });
@@ -170,7 +173,7 @@ namespace PSP_PoS.Migrations
                     b.Property<int>("PaymentType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("TaxId")
+                    b.Property<Guid?>("TaxId")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Tip")
@@ -178,45 +181,13 @@ namespace PSP_PoS.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("TaxId");
+
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("PSP_PoS.Components.OrderItemComponent.OrderItem", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("OrderId", "ItemId");
-
-                    b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("PSP_PoS.Components.ReservationComponent.Reservation", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("OrderId", "ServiceId");
-
-                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("PSP_PoS.Components.ServiceComponent.Service", b =>
@@ -229,14 +200,13 @@ namespace PSP_PoS.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("DiscountId")
+                    b.Property<Guid?>("DiscountId")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Duration")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -246,6 +216,10 @@ namespace PSP_PoS.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DiscountId");
 
                     b.ToTable("Services");
                 });
@@ -266,6 +240,94 @@ namespace PSP_PoS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Taxes");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.ItemComponent.Item", b =>
+                {
+                    b.HasOne("PSP_PoS.Components.CategoryComponent.Category", "Category")
+                        .WithMany("Items")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PSP_PoS.Components.DiscountComponent.Discount", "Discount")
+                        .WithMany("Items")
+                        .HasForeignKey("DiscountId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Discount");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.OrderComponent.Order", b =>
+                {
+                    b.HasOne("PSP_PoS.Components.CustomerComponent.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PSP_PoS.Components.EmployeeComponent.Employee", "Employee")
+                        .WithMany("Orders")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PSP_PoS.Components.TaxComponent.Tax", "Tax")
+                        .WithMany("Orders")
+                        .HasForeignKey("TaxId");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Tax");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.ServiceComponent.Service", b =>
+                {
+                    b.HasOne("PSP_PoS.Components.CategoryComponent.Category", "Category")
+                        .WithMany("Services")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PSP_PoS.Components.DiscountComponent.Discount", "Discount")
+                        .WithMany("Services")
+                        .HasForeignKey("DiscountId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Discount");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.CategoryComponent.Category", b =>
+                {
+                    b.Navigation("Items");
+
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.CustomerComponent.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.DiscountComponent.Discount", b =>
+                {
+                    b.Navigation("Items");
+
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.EmployeeComponent.Employee", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("PSP_PoS.Components.TaxComponent.Tax", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

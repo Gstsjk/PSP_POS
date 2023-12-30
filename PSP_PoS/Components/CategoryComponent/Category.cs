@@ -1,8 +1,10 @@
 ﻿using PSP_PoS.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PSP_PoS.Components.TaxComponent;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using PSP_PoS.Components.ItemComponent;
+using PSP_PoS.Components.ServiceComponent;
+using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace PSP_PoS.Components.CategoryComponent
 {
@@ -15,13 +17,21 @@ namespace PSP_PoS.Components.CategoryComponent
         [Required]
         public string Name { get; set; }
 
+        //Navigation
+        [JsonIgnore]
+        public List<Item> Items { get; set; }
+        [JsonIgnore]
+        public List<Service> Services { get; set; }
+
         public Category()
         {
+            
+        }
 
-        }
-        public Category(CategoryDto categoryDto)
+        public Category(CategoryCreateDto categoryCreateDto)
         {
-            Name = categoryDto.Name;
+            Name = categoryCreateDto.Name;
         }
+        
     }
 }

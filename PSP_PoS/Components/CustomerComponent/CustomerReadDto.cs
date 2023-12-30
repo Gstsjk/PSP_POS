@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace PSP_PoS.Components.CustomerComponent
+﻿namespace PSP_PoS.Components.CustomerComponent
 {
-    public class CustomerDto
+    public class CustomerReadDto
     {
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         public string Surname { get; set; }
@@ -13,8 +12,9 @@ namespace PSP_PoS.Components.CustomerComponent
 
         public string Password { get; set; }
 
-        public CustomerDto(Customer customer) 
+        public CustomerReadDto(Customer customer)
         {
+            Id = customer.Id;
             Name = customer.Name;
             Surname = customer.Surname;
             Email = customer.Email;

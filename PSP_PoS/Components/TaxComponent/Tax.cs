@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PSP_PoS.Enums;
+using PSP_PoS.Components.OrderComponent;
 using System.Text.Json.Serialization;
 
 namespace PSP_PoS.Components.TaxComponent
@@ -12,18 +12,22 @@ namespace PSP_PoS.Components.TaxComponent
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]        
+        [Required]
         public int Rate { get; set; }
 
+        //Navigation
+        [JsonIgnore]
+        public List<Order> Orders { get; set;  }
 
         public Tax()
         {
-
+            
         }
-        public Tax(TaxDto taxDto)
+
+        public Tax(TaxCreateDto taxCreateDto)
         {
-            Name = taxDto.Name;
-            Rate = taxDto.Rate;
+            Name = taxCreateDto.Name;
+            Rate = taxCreateDto.Rate;
         }
     }
 }

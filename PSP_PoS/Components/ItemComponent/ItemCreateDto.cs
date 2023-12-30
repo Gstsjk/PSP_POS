@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using PSP_PoS.Components.CategoryComponent;
+using PSP_PoS.Components.DiscountComponent;
 using System.ComponentModel.DataAnnotations;
 
 namespace PSP_PoS.Components.ItemComponent
 {
-    public class ItemDto
+    public class ItemCreateDto
     {
         public string Name { get; set; }
 
@@ -14,7 +15,5 @@ namespace PSP_PoS.Components.ItemComponent
         public int Stock { get; set; }
 
         public Guid CategoryId { get; set; }
-
-        public Guid? DiscountId { get; set; }
     }
 }

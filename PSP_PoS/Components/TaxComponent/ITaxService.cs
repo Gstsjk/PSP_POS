@@ -2,10 +2,10 @@
 {
     public interface ITaxService
     {
-        List<Tax> GetAllTaxes();
-        Tax? GetTaxById(Guid taxId);
-        Tax AddTax(TaxDto tax);
-        bool UpdateTax(TaxDto tax, Guid id);
+        List<TaxReadDto> GetAllTaxes();
+        TaxReadDto GetTaxById(Guid taxId);
+        Tax AddTax(TaxCreateDto taxCreateDto);
+        bool UpdateTax(TaxCreateDto taxCreateDto, Guid id);
         void DeleteTax(Guid taxId);
     }
 }

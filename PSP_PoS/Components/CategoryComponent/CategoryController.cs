@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PSP_PoS.Components.CategoryComponent;
-using PSP_PoS.Components.DiscountComponent;
 
 
 namespace PSP_PoS.Components.CategoryComponent
@@ -9,7 +7,6 @@ namespace PSP_PoS.Components.CategoryComponent
     [ApiController]
     public class CategoryController : ControllerBase
     {
-      
         private readonly ICategoryService _categoryService;
 
         public CategoryController(ICategoryService categoryService)
@@ -17,17 +14,11 @@ namespace PSP_PoS.Components.CategoryComponent
             _categoryService = categoryService;
         }
 
-        [HttpPost]
-        public IActionResult AddCategory([FromBody] CategoryDto categoryDto)
+        [HttpGet]
+        public IActionResult GetAllCategories()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var category = _categoryService.AddCategory(categoryDto);
-
-            return CreatedAtAction(nameof(AddCategory), category);
+            var categoriesReadDto = _categoryService.GetAllCategories();
+            return Ok(categoriesReadDto);
         }
 
         [HttpGet("{id}")]
@@ -39,38 +30,39 @@ namespace PSP_PoS.Components.CategoryComponent
             }
 
             var category = _categoryService.GetCategoryById(categoryId);
-
             if (category == null)
             {
                 return NotFound();
             }
-
             return Ok(category);
         }
 
-        [HttpGet]
-        public IActionResult GetCategories()
+        [HttpPost]
+        public IActionResult AddCategory([FromBody] CategoryCreateDto categoryCreateDto)
         {
-            var categories = _categoryService.GetAllCategories();
-            return Ok(categories);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var category = _categoryService.AddCategory(categoryCreateDto);
+            return CreatedAtAction(nameof(AddCategory), category);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] CategoryDto categoryDto)
+        public IActionResult UpdateCategory([FromRoute] string id, [FromBody] CategoryCreateDto categoryCreateDto)
         {
             if (!System.Guid.TryParse(id, out var categoryId))
             {
                 return BadRequest("Invalid category ID format");
             }
 
-            if (_categoryService.UpdateCategory(categoryDto, categoryId))
+            if (_categoryService.UpdateCategory(categoryCreateDto, categoryId))
             {
-                return StatusCode(201);
-                //return Ok();
+                return Ok();
             }
             else
             {
-                return BadRequest("Record not found.");
+                return BadRequest("Record not found");
             }
         }
 
@@ -81,16 +73,12 @@ namespace PSP_PoS.Components.CategoryComponent
             {
                 return BadRequest("Invalid category ID format");
             }
-
-            var tax = _categoryService.GetCategoryById(categoryId);
-
-            if (tax == null)
+            var category = _categoryService.GetCategoryById(categoryId);
+            if (category == null)
             {
                 return NotFound();
             }
-
             _categoryService.DeleteCategory(categoryId);
-
             return NoContent();
         }
     }

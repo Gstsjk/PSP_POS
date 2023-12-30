@@ -1,6 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using PSP_PoS.Components.OrderComponent;
 using PSP_PoS.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using PSP_PoS.OtherDtos;
 
 namespace PSP_PoS.Components.EmployeeComponent
 {
@@ -32,36 +35,35 @@ namespace PSP_PoS.Components.EmployeeComponent
 
         public int EndTime { get; set; }
 
+        //Navigation
+        [JsonIgnore]
+        public List<Order> Orders { get; set; }
+
         public Employee()
         {
 
         }
 
-        public Employee(EmployeeDto employee)
+        public Employee(EmployeeCreateDto employeeCreateDto)
         {
-            Username = employee.Username;
-            Password = employee.Password;
-            Name = employee.Name;
-            Surname = employee.Surname;
-            Privileges = employee.Privileges;
-            WorkingDays = employee.WorkingDays;
-            StartTime = employee.StartTime.Hours*60+employee.StartTime.Minutes;
-            EndTime = employee.EndTime.Hours*60+employee.StartTime.Minutes;
+            Username = employeeCreateDto.Username;
+            Password = employeeCreateDto.Password;
+            Name = employeeCreateDto.Name;
+            Surname = employeeCreateDto.Surname;
+            Privileges = employeeCreateDto.Privileges;
+            StartTime = employeeCreateDto.StartTime.Hours * 60 + employeeCreateDto.StartTime.Minutes;
+            EndTime = employeeCreateDto.EndTime.Hours * 60 + employeeCreateDto.StartTime.Minutes;
         }
 
-        public void UpdateEmployee(EmployeeDto employee)
+        public void UpdateEmployee(EmployeeCreateDto employeeCreateDto)
         {
-            Username = employee.Username;
-            Password = employee.Password;
-            Name = employee.Name;
-            Surname = employee.Surname;
-            Privileges = employee.Privileges;
-            WorkingDays = employee.WorkingDays;
-            StartTime = employee.StartTime.Hours * 60 + employee.StartTime.Minutes;
-            EndTime = employee.EndTime.Hours * 60 + employee.StartTime.Minutes;
+            Username = employeeCreateDto.Username;
+            Password = employeeCreateDto.Password;
+            Name = employeeCreateDto.Name;
+            Surname = employeeCreateDto.Surname;
+            Privileges = employeeCreateDto.Privileges;
+            StartTime = employeeCreateDto.StartTime.Hours * 60 + employeeCreateDto.StartTime.Minutes;
+            EndTime = employeeCreateDto.EndTime.Hours * 60 + employeeCreateDto.StartTime.Minutes;
         }
-
     }
-
-
 }

@@ -2,14 +2,10 @@
 {
     public interface IDiscountService
     {
-        public Discount AddDiscount(DiscountDto discountDto);
-
-        public List<Discount> GetDiscounts();
-
-        public Discount? GetDiscountById(Guid id);
-
-        public bool UpdateDiscount(DiscountDto discountDto, Guid id);
-
-        public bool DeleteDiscount(Guid id);
+        List<DiscountReadDto> GetAllDiscounts();
+        Discount GetDiscountById(Guid discountId);
+        Discount AddDiscount(DiscountCreateDto discountCreateDto);
+        bool UpdateDiscount(DiscountCreateDto discountCreateDto, Guid id);
+        void DeleteDiscount(Guid discountId);
     }
 }

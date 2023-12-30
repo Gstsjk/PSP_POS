@@ -1,19 +1,16 @@
-﻿using PSP_PoS.Components.DiscountComponent;
-
-namespace PSP_PoS.Components.ItemComponent
+﻿namespace PSP_PoS.Components.ItemComponent
 {
-    public interface IItemService 
+    public interface IItemService
     {
-        public Item AddItem(ItemDto itemDto);
-
-        public List<Item> GetItems();
-
-        public Item? GetItemById(Guid id);
-
-        public bool UpdateItem(ItemDto itemDto, Guid id);
-
-        public bool UpdateItemDiscount(Guid? discountId, Guid id);
-
-        public bool DeleteItem(Guid id);
+        List<ItemReadDto> GetAllItems();
+        ItemReadDto GetItemById(Guid itemId);
+        Item AddItem(ItemCreateDto itemCreateDto);
+        bool AddDiscountToItem(Guid itemId, Guid discountId);
+        bool UpdateItem(ItemCreateDto itemCreateDto, Guid id);
+        void DeleteItem(Guid itemId);
+        bool RemoveDiscountFromItem(Guid itemId);
+        bool IfCategoryIdValid(Guid id);
+        bool IfDiscountIdValid(Guid id);
+        bool IfItemIdValid(Guid id);
     }
 }

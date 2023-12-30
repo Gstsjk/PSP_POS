@@ -5,7 +5,7 @@
 namespace PSP_PoS.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedEmployeeDateTime : Migration
+    public partial class addedFKeys : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

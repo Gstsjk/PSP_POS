@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PSP_PoS.Components.DiscountComponent;
-using PSP_PoS.Components.TaxComponent;
-using System.ComponentModel;
-using System.Data.SqlTypes;
+using PSP_PoS.Components.CategoryComponent;
 
 namespace PSP_PoS.Components.TaxComponent
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaxController : ControllerBase
+    public class TaxController : Controller
     {
         private readonly ITaxService _taxService;
 
@@ -17,17 +14,11 @@ namespace PSP_PoS.Components.TaxComponent
             _taxService = taxService;
         }
 
-        [HttpPost]
-        public IActionResult AddTax([FromBody] TaxDto taxDto)
+        [HttpGet]
+        public IActionResult GetAllTaxes()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            
-            var tax =_taxService.AddTax(taxDto);
-
-            return CreatedAtAction(nameof(AddTax), tax);
+            var taxesReadDto = _taxService.GetAllTaxes();
+            return Ok(taxesReadDto);
         }
 
         [HttpGet("{id}")]
@@ -37,40 +28,40 @@ namespace PSP_PoS.Components.TaxComponent
             {
                 return BadRequest("Invalid tax ID format");
             }
-
             var tax = _taxService.GetTaxById(taxId);
-
-            if (tax == null)
+            if(tax == null)
             {
                 return NotFound();
             }
-
             return Ok(tax);
         }
 
-        [HttpGet]
-        public IActionResult GetTaxes()
+        [HttpPost]
+        public IActionResult AddTax([FromBody] TaxCreateDto taxCreateDto)
         {
-            var taxes = _taxService.GetAllTaxes();
-            return Ok(taxes);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var tax = _taxService.AddTax(taxCreateDto);
+            return CreatedAtAction(nameof(AddTax), tax);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateTax([FromRoute] string id, [FromBody] TaxDto taxDto)
+        public IActionResult UpdateTax([FromRoute] string id, [FromBody] TaxCreateDto taxCreateDto)
         {
             if (!System.Guid.TryParse(id, out var taxId))
             {
                 return BadRequest("Invalid tax ID format");
             }
 
-            if (_taxService.UpdateTax(taxDto, taxId))
+            if(_taxService.UpdateTax(taxCreateDto, taxId))
             {
-                return StatusCode(201);
-                //return Ok();
+                return Ok();
             }
             else
             {
-                return BadRequest("Record not found.");
+                return BadRequest("Record not found");
             }
         }
 
@@ -81,16 +72,12 @@ namespace PSP_PoS.Components.TaxComponent
             {
                 return BadRequest("Invalid tax ID format");
             }
-
             var tax = _taxService.GetTaxById(taxId);
-
-            if (tax == null)
+            if(tax == null)
             {
                 return NotFound();
             }
-
             _taxService.DeleteTax(taxId);
-
             return NoContent();
         }
     }

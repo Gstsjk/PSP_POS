@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PSP_PoS.Enums;
+using PSP_PoS.Components.ItemComponent;
+using PSP_PoS.Components.ServiceComponent;
+using System.Text.Json.Serialization;
 
 namespace PSP_PoS.Components.DiscountComponent
 {
@@ -16,15 +19,22 @@ namespace PSP_PoS.Components.DiscountComponent
         [Required]
         public int Percentage { get; set; } // 0 - 100 %
 
+        //Navigation
+        [JsonIgnore]
+        public List<Item> Items { get; set; }
+        [JsonIgnore]
+        public List<Service> Services { get; set; }
+
         public Discount()
         {
 
         }
 
-        public Discount(DiscountDto discountDto)
+        public Discount(DiscountCreateDto discountCreateDto)
         {
-            DiscountType = discountDto.DiscountType;
-            Percentage = discountDto.Percentage;
+            DiscountType = discountCreateDto.DiscountType;
+            Percentage = discountCreateDto.Percentage;
         }
+
     }
 }

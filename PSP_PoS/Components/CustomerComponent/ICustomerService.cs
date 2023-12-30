@@ -1,19 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using PSP_PoS.Components.CategoryComponent;
 
 namespace PSP_PoS.Components.CustomerComponent
 {
     public interface ICustomerService
     {
-        public List<Customer> GetCustomers();
-
-        public Customer? GetCustomerById(Guid id);
-
-        public Customer? GetCustomerByEmail(string email);
-
-        public Customer AddCustomer(CustomerDto customerDto);
-
-        public bool UpdateCustomer(CustomerDto customerDto, Guid id);
-
-        public bool DeleteCustomer(Guid id);
+        List<CustomerReadDto> GetAllCustomers();
+        Customer GetCustomerById(Guid customerId);
+        Customer AddCustomer(CustomerCreateDto customerCreateDto);
+        bool UpdateCustomer(CustomerCreateDto customerCreateDto, Guid id);
+        void DeleteCustomer(Guid customerId);
     }
 }

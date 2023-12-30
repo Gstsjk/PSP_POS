@@ -14,17 +14,11 @@ namespace PSP_PoS.Components.EmployeeComponent
             _employeeService = employeeService;
         }
 
-        [HttpPost]
-        public IActionResult AddEmployee([FromBody] EmployeeDto employeeDto)
+        [HttpGet]
+        public ActionResult GetAllEmployees()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Employee employee = _employeeService.AddEmployee(employeeDto);
-
-            return CreatedAtAction(nameof(AddEmployee), employee);
+            var employeeReadDto = _employeeService.GetAllEmployees();
+            return Ok(employeeReadDto);
         }
 
         [HttpGet("{id}")]
@@ -34,40 +28,39 @@ namespace PSP_PoS.Components.EmployeeComponent
             {
                 return BadRequest("Invalid employee ID format");
             }
-
             var employee = _employeeService.GetEmployeeById(employeeId);
-
             if (employee == null)
             {
                 return NotFound();
             }
-
             return Ok(employee);
         }
 
-        [HttpGet]
-        public IActionResult GetEmployees()
+        [HttpPost]
+        public ActionResult AddEmployee([FromBody] EmployeeCreateDto employeeCreateDto)
         {
-            var employees = _employeeService.GetEmployees();
-            return Ok(employees);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var employee = _employeeService.AddEmployee(employeeCreateDto);
+            return CreatedAtAction(nameof(AddEmployee), employee);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployee([FromRoute] string id, [FromBody] EmployeeDto employeeDto)
+        public IActionResult UpdateEmployee([FromRoute] string id, [FromBody] EmployeeCreateDto employeeCreateDto)
         {
             if (!System.Guid.TryParse(id, out var employeeId))
             {
                 return BadRequest("Invalid employee ID format");
             }
-
-            if (_employeeService.UpdateEmployee(employeeDto, employeeId))
+            if(_employeeService.UpdateEmployee(employeeCreateDto, employeeId))
             {
-                return StatusCode(201);
-                //return Ok();
+                return Ok();
             }
             else
             {
-                return BadRequest("Record not found.");
+                return BadRequest("Record not found");
             }
         }
 
@@ -76,18 +69,15 @@ namespace PSP_PoS.Components.EmployeeComponent
         {
             if (!System.Guid.TryParse(id, out var employeeId))
             {
-                return BadRequest("Invalid customer ID format");
+                return BadRequest("Invalid employee ID format");
             }
-
-
-            if (_employeeService.DeleteEmployee(employeeId))
+            var employee = _employeeService.GetEmployeeById(employeeId);
+            if(employee == null)
             {
-                return Ok();
+                return NotFound();
             }
-            else
-            {
-                return BadRequest("Record not found.");
-            }
+            _employeeService.DeleteEmployee(employeeId);
+            return NoContent();
         }
     }
 }

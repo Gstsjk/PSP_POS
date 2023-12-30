@@ -2,7 +2,7 @@
 
 namespace PSP_PoS.Components.TaxComponent
 {
-    public class TaxService : ITaxService
+    public class TaxService
     {
         private readonly DataContext _context;
 
@@ -11,34 +11,43 @@ namespace PSP_PoS.Components.TaxComponent
             _context = context;
         }
 
-        public List<Tax> GetAllTaxes()
+        public List<TaxReadDto> GetAllTaxes()
         {
-            return _context.Taxes.ToList();
+            List<Tax> taxes = _context.Taxes.ToList();
+            List<TaxReadDto> taxReadDtos = new List<TaxReadDto>();
+
+            foreach (var tax in taxes)
+            {
+                TaxReadDto taxReadDto = new TaxReadDto(tax);
+                taxReadDtos.Add(taxReadDto);
+            }
+            return taxReadDtos;
         }
 
-        public Tax? GetTaxById(Guid taxId)
+        public TaxReadDto GetTaxById(Guid taxId)
         {
-            return _context.Taxes.FirstOrDefault(t => t.Id == taxId);
+            var tax = _context.Taxes.FirstOrDefault(t => t.Id == taxId)!;
+            TaxReadDto taxReadDto = new TaxReadDto(tax);
+            return taxReadDto;
         }
 
-        public Tax AddTax(TaxDto taxDto)
+        public Tax AddTax(TaxCreateDto taxCreateDto)
         {
-            Tax tax = new Tax(taxDto);
+            Tax tax = new Tax(taxCreateDto);
             _context.Taxes.Add(tax);
             _context.SaveChanges();
             return tax;
         }
 
-        public bool UpdateTax(TaxDto taxDto, Guid id)
+        public bool UpdateTax(TaxCreateDto taxCreateDto, Guid id)
         {
             Tax? tax = _context.Taxes.Find(id);
-
             if(tax == null)
             {
                 return false;
             }
-            tax.Name = taxDto.Name;
-            tax.Rate = taxDto.Rate;
+            tax.Name = taxCreateDto.Name;
+            tax.Rate = taxCreateDto.Rate;
 
             _context.Taxes.Update(tax);
             _context.SaveChanges();
@@ -47,9 +56,8 @@ namespace PSP_PoS.Components.TaxComponent
 
         public void DeleteTax(Guid taxId)
         {
-            var tax = _context.Taxes.FirstOrDefault(t => t.Id == taxId);
-
-            if (tax != null)
+            var tax = _context.Taxes.FirstOrDefault(t => t.Id==taxId); 
+            if(tax != null)
             {
                 _context.Taxes.Remove(tax);
                 _context.SaveChanges();
