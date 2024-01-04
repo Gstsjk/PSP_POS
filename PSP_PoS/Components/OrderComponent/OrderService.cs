@@ -4,7 +4,10 @@ using PSP_PoS.Components.ItemOrderComponent;
 using PSP_PoS.Components.OrderItemsComponent;
 using PSP_PoS.Components.OrderService;
 using PSP_PoS.Components.OrderServicesComponent;
+using PSP_PoS.Components.ServiceComponent;
 using PSP_PoS.Data;
+using PSP_PoS.OtherDtos;
+using System.Linq;
 
 namespace PSP_PoS.Components.OrderComponent
 {
@@ -156,6 +159,67 @@ namespace PSP_PoS.Components.OrderComponent
             { 
                 return false;
             }
+        }
+
+        public bool RemoveServiceFromOrder(Guid orderId, Guid serviceId)
+        {
+            OrderServices existingOrderService = _context.OrderServices
+                .FirstOrDefault(o => o.OrderId == orderId && o.ServiceId == serviceId)!;
+
+            if (existingOrderService != null)
+            {
+                _context.OrderServices.Remove(existingOrderService);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
+        public Cheque GenerateCheque(Guid orderId)
+        {
+            Order order = _context.Orders.Find(orderId)!;
+            List<OrderItems> orderItems = _context.OrderItems
+                    .Where(oi => oi.OrderId == orderId)
+                    .ToList();
+            List<OrderServices> orderServices = _context.OrderServices
+                    .Where(oi => oi.OrderId == orderId)
+                    .ToList();
+            List<ItemCheque> itemCheques = _context.OrderItems
+                    .Where(oi => oi.OrderId == orderId)
+                    .Join(
+                        _context.Items,
+                        orderItem => orderItem.ItemId,
+                        item => item.Id,            
+                        (orderItem, item) => new ItemCheque
+                        {
+                            Name = item.Name,
+                            Price = item.Price / 100,
+                            Quantity = orderItem.Quantity
+                        }
+                        )
+                        .ToList();
+
+            List<ServiceCheque> serviceCheques = _context.OrderServices
+                    .Where(oi => oi.OrderId == orderId)
+                    .Join(
+                        _context.Services,
+                        orderService => orderService.ServiceId,
+                        service => service.Id,
+                        (orderService, service) => new ServiceCheque
+                        {
+                            Name = service.Name,
+                            Price = service.Price / 100,
+                            Quantity = orderService.Quantity
+                        }
+                        )
+                        .ToList();
+
+            Cheque cheque = new Cheque(order, itemCheques, serviceCheques);
+            return cheque;
         }
 
         public bool IfCustomerIdValid(Guid id)

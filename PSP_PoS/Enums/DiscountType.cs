@@ -2,10 +2,8 @@
 {
     public enum DiscountType
     {
-        SocialWelfare,
-        Foreign,
-        Student,
-        Senior,
-        Holiday
+        Holiday,
+        Weekly,
+        After8,
     }
 }

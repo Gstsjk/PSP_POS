@@ -52,7 +52,7 @@ namespace PSP_PoS.Components.OrderComponent
             {
                 return NotFound("Item not found.");
             }
-            if(!_orderService.IfItemExists(itemIdGuid))
+            if (!_orderService.IfItemExists(itemIdGuid))
             {
                 return BadRequest("No more stock left.");
             }
@@ -86,14 +86,14 @@ namespace PSP_PoS.Components.OrderComponent
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetOrderById([FromRoute] string id)
+        public IActionResult GetOrderById([FromRoute] string id)
         {
             if (!System.Guid.TryParse(id, out var itemId))
             {
                 return BadRequest("Invalid order ID format");
             }
             var order = _orderService.GetOrderById(itemId);
-            if(order == null)
+            if (order == null)
             {
                 return NotFound();
             }
@@ -101,14 +101,14 @@ namespace PSP_PoS.Components.OrderComponent
         }
 
         [HttpGet]
-        public ActionResult GetAllOrders()
+        public IActionResult GetAllOrders()
         {
             var ordersReadDto = _orderService.GetAllOrders();
             return Ok(ordersReadDto);
         }
 
         [HttpPut("{orderId} {itemId} | Remove Item From Order")]
-        public ActionResult RemoveItemFromOrder([FromRoute] string orderId, [FromRoute] string itemId)
+        public IActionResult RemoveItemFromOrder([FromRoute] string orderId, [FromRoute] string itemId)
         {
             if (!System.Guid.TryParse(orderId, out Guid orderIdGuid))
             {
@@ -118,7 +118,7 @@ namespace PSP_PoS.Components.OrderComponent
             {
                 return BadRequest("Invalid item ID format");
             }
-            if(_orderService.RemoveItemFromOrder(orderIdGuid, itemIdGuid))
+            if (_orderService.RemoveItemFromOrder(orderIdGuid, itemIdGuid))
             {
                 return Ok();
             }
@@ -128,5 +128,37 @@ namespace PSP_PoS.Components.OrderComponent
             }
         }
 
+        [HttpPut("{orderId} {serviceId} | Remove Service From Order")]
+        public IActionResult RemoveServiceFromOrder([FromRoute] string orderId, [FromRoute] string serviceId)
+        {
+            if (!System.Guid.TryParse(orderId, out Guid orderIdGuid))
+            {
+                return BadRequest("Invalid order ID format");
+            }
+            if (!System.Guid.TryParse(serviceId, out Guid serviceIdGuid))
+            {
+                return BadRequest("Invalid service ID format");
+            }
+            if(_orderService.RemoveServiceFromOrder(orderIdGuid,serviceIdGuid))
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Service not foung in order");
+            }
+
+        }
+
+        [HttpGet("{id} | Generate Cheque For Order")]
+        public IActionResult GenerateCheque([FromRoute] string id)
+        {
+            if (!System.Guid.TryParse(id, out Guid orderIdGuid))
+            {
+                return BadRequest("Invalid order ID format");
+            }
+            var cheque = _orderService.GenerateCheque(orderIdGuid);
+            return Ok(cheque);
+        }
     }
 }

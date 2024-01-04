@@ -11,7 +11,7 @@ namespace PSP_PoS.Components.OrderComponent
 
         public DateTime DateCreated { get; set; }
 
-        public Status OrderStatus { get; set; }
+        public string OrderStatus { get; set; }
 
         public decimal? Tip { get; set; }
 
@@ -31,7 +31,7 @@ namespace PSP_PoS.Components.OrderComponent
         {
             Id = order.Id;
             DateCreated = order.DateCreated;
-            OrderStatus = order.OrderStatus;
+            OrderStatus = ConvertOrderStatus(order.OrderStatus);
             Tip = order.Tip;
             PaymentType = order.PaymentType;
             CustomerId = order.CustomerId;
@@ -40,6 +40,27 @@ namespace PSP_PoS.Components.OrderComponent
             Items = orderItemIdDto;
             Services = orderServiceIdDto;
 
+        }
+
+        private static string ConvertOrderStatus(Status orderStatus)
+        {
+            switch (orderStatus)
+            {
+                case Status.Initial:
+                    return "Initial";
+                case Status.InProgress:
+                    return "InProgress";
+                case Status.Cancelled:
+                    return "Cancelled";
+                case Status.Reserved:
+                    return "Reserved";
+                case Status.Failed:
+                    return "Failed";
+                case Status.Finished:
+                    return "Finished";
+                default:
+                    return "Unknown";
+            }
         }
     }
 }
