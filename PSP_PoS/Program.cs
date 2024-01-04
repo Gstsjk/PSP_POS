@@ -7,6 +7,7 @@ using PSP_PoS.Components.ItemComponent;
 using PSP_PoS.Components.CustomerComponent;
 using PSP_PoS.Components.EmployeeComponent;
 using PSP_PoS.Components.ServiceComponent;
+using PSP_PoS.Components.OrderComponent;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,7 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
-//builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 //builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 //builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();

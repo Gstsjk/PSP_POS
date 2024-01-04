@@ -3,7 +3,6 @@
     public enum Status
     {
         Initial,
-        Pending,
         InProgress,
         Cancelled,
         Reserved,
