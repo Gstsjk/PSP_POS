@@ -2,6 +2,7 @@
 {
     public enum PaymentType
     {
+        NotPaid,
         Cash,
         Card,
         Coupon

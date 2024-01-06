@@ -2,7 +2,7 @@
 
 namespace PSP_PoS.Components.TaxComponent
 {
-    public class TaxService
+    public class TaxService : ITaxService
     {
         private readonly DataContext _context;
 

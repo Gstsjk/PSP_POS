@@ -26,7 +26,7 @@ namespace PSP_PoS.Components.OrderComponent
 
         public decimal? Tip { get; set; }
 
-        public PaymentType? PaymentType { get; set; }
+        public PaymentType PaymentType { get; set; }
 
         [Required]
         public Guid CustomerId { get; set; }
@@ -62,7 +62,8 @@ namespace PSP_PoS.Components.OrderComponent
             EmployeeId = orderCreateDto.EmployeeId;
             CustomerId = orderCreateDto.CustomerId;
             DateCreated = DateTime.Now;
-            OrderStatus = Status.Initial;
+            OrderStatus = Status.InProgress;
+            PaymentType = PaymentType.NotPaid;
         }
     }
 }

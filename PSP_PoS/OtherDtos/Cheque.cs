@@ -26,17 +26,42 @@ namespace PSP_PoS.OtherDtos
             Date = order.DateCreated;
             Items = itemCheques;
             Services = serviceCheques;
-            
-            PriceBeforeTax = Items.Sum(item => item.Price * item.Quantity);
-            PriceBeforeTax += Services.Sum(service => service.Price * service.Quantity);
+            PriceBeforeTax = 0;
+            PriceAfterTax = 0;
+            foreach (var item in Items)
+            {
+                if (item.DiscountPercentage != 0)
+                {
+                    PriceBeforeTax += item.PriceAfterDiscount * item.Quantity;
+                }
+                else
+                {
+                    PriceBeforeTax += item.Price * item.Quantity;
+                }
+            }
+            foreach (var service in Services)
+            {
+                if (service.DiscountPercentage != 0)
+                {
+                    PriceBeforeTax += service.PriceAfterDiscount * service.Quantity;
+                }
+                else
+                {
+                    PriceBeforeTax += service.Price * service.Quantity;
+                }
+            }
             if(order.Tax == null)
             {
+                TaxAmount = 0;
                 PriceAfterTax = PriceBeforeTax;
+                
             }
             else
             {
                 TaxAmount = order.Tax.Rate;
-                PriceAfterTax = PriceBeforeTax * (TaxAmount / 100) + PriceBeforeTax;
+
+                decimal taxAmount = TaxAmount;
+                PriceAfterTax = Math.Round(PriceBeforeTax * (taxAmount / 100m) + PriceBeforeTax, 2);
             }
             
         }

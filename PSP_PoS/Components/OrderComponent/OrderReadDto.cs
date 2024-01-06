@@ -15,7 +15,7 @@ namespace PSP_PoS.Components.OrderComponent
 
         public decimal? Tip { get; set; }
 
-        public PaymentType? PaymentType { get; set; }
+        public string Payment { get; set; }
 
         public Guid CustomerId { get; set; }
 
@@ -33,7 +33,7 @@ namespace PSP_PoS.Components.OrderComponent
             DateCreated = order.DateCreated;
             OrderStatus = ConvertOrderStatus(order.OrderStatus);
             Tip = order.Tip;
-            PaymentType = order.PaymentType;
+            Payment = ConvertPaymentType(order.PaymentType);
             CustomerId = order.CustomerId;
             EmployeeId = order.EmployeeId;
             TaxId = order.TaxId;
@@ -46,8 +46,6 @@ namespace PSP_PoS.Components.OrderComponent
         {
             switch (orderStatus)
             {
-                case Status.Initial:
-                    return "Initial";
                 case Status.InProgress:
                     return "InProgress";
                 case Status.Cancelled:
@@ -58,6 +56,27 @@ namespace PSP_PoS.Components.OrderComponent
                     return "Failed";
                 case Status.Finished:
                     return "Finished";
+                case Status.Paid:
+                    return "Paid";
+                case Status.PaidAndTipped:
+                    return "PaidAndTipped";
+                default:
+                    return "Unknown";
+            }
+        }
+
+        private static string ConvertPaymentType(PaymentType payment)
+        {
+            switch (payment)
+            {
+                case PaymentType.NotPaid: 
+                    return "Not paid";
+                case PaymentType.Cash:
+                    return "Paid by cash";
+                case PaymentType.Card:
+                    return "Paid by card";
+                case PaymentType.Coupon:
+                    return "Paid by coupon";
                 default:
                     return "Unknown";
             }

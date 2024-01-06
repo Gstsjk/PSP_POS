@@ -2,9 +2,11 @@
 {
     public enum Status
     {
-        Initial,
         InProgress,
         Cancelled,
+        WaitingForPayment,
+        Paid,
+        PaidAndTipped,
         Reserved,
         Failed,
         Finished

@@ -6,6 +6,7 @@ using PSP_PoS.Components.OrderService;
 using PSP_PoS.Components.OrderServicesComponent;
 using PSP_PoS.Components.ServiceComponent;
 using PSP_PoS.Data;
+using PSP_PoS.Enums;
 using PSP_PoS.OtherDtos;
 using System.Linq;
 
@@ -73,6 +74,26 @@ namespace PSP_PoS.Components.OrderComponent
             }
         }
 
+        public bool AddTaxToOrder(Guid orderId, Guid taxId)
+        {
+            Order? order = _context.Orders.Include(o => o.Tax).FirstOrDefault(o => o.Id == orderId);
+            order.TaxId = taxId;
+            order.Tax = _context.Taxes.Find(taxId);
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+            return true;
+        }
+        
+        public bool RemoveTaxFromOrder(Guid orderId)
+        {
+            Order? order = _context.Orders.Find(orderId);
+            order.TaxId = null;
+            order.Tax = null;
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+            return true;
+        }
+
         public OrderReadDto GetOrderById(Guid orderId)
         {
             var order = _context.Orders.FirstOrDefault(o => o.Id == orderId)!;
@@ -126,7 +147,11 @@ namespace PSP_PoS.Components.OrderComponent
                     .ToList();
 
                 OrderReadDto orderReadDto = new OrderReadDto(order, orderItems, orderServices);
-                orderReadDtos.Add(orderReadDto);
+                if(orderReadDto.OrderStatus != "Finished")
+                {
+                    orderReadDtos.Add(orderReadDto);
+                }
+                
             }
 
             return orderReadDtos;
@@ -181,7 +206,7 @@ namespace PSP_PoS.Components.OrderComponent
 
         public Cheque GenerateCheque(Guid orderId)
         {
-            Order order = _context.Orders.Find(orderId)!;
+            Order order = _context.Orders.Include(o => o.Tax).FirstOrDefault(o => o.Id == orderId)!;
             List<OrderItems> orderItems = _context.OrderItems
                     .Where(oi => oi.OrderId == orderId)
                     .ToList();
@@ -193,15 +218,19 @@ namespace PSP_PoS.Components.OrderComponent
                     .Join(
                         _context.Items,
                         orderItem => orderItem.ItemId,
-                        item => item.Id,            
+                        item => item.Id,
                         (orderItem, item) => new ItemCheque
                         {
                             Name = item.Name,
-                            Price = item.Price / 100,
-                            Quantity = orderItem.Quantity
+                            Price = Math.Round(item.Price / 100m, 2),
+                            Quantity = orderItem.Quantity,
+                            DiscountPercentage = (item.Discount != null) ? item.Discount.Percentage : 0,
+                            PriceAfterDiscount = (item.Discount != null)
+                                ? Math.Round((item.Price / 100) - (item.Price / 100 * ((decimal)item.Discount.Percentage / 100)), 2)
+                                : Math.Round(item.Price / 100, 2)
                         }
-                        )
-                        .ToList();
+                    )
+                    .ToList();
 
             List<ServiceCheque> serviceCheques = _context.OrderServices
                     .Where(oi => oi.OrderId == orderId)
@@ -212,14 +241,75 @@ namespace PSP_PoS.Components.OrderComponent
                         (orderService, service) => new ServiceCheque
                         {
                             Name = service.Name,
-                            Price = service.Price / 100,
-                            Quantity = orderService.Quantity
+                            Price = Math.Round(service.Price / 100, 2), 
+                            Quantity = orderService.Quantity,
+                            DiscountPercentage = (service.Discount != null) ? service.Discount.Percentage : 0,
+                            PriceAfterDiscount = (service.Discount != null)
+                                ? Math.Round((service.Price / 100) - (service.Price / 100 * ((decimal)service.Discount.Percentage / 100)), 2)
+                                : Math.Round(service.Price / 100, 2)  
                         }
-                        )
-                        .ToList();
+                    )
+                    .ToList();
+
 
             Cheque cheque = new Cheque(order, itemCheques, serviceCheques);
             return cheque;
+        }
+
+        public void DeleteOrder(Guid orderId)
+        {
+            Order order = _context.Orders.FirstOrDefault(o => o.Id == orderId)!;
+            if(order != null)
+            {
+                _context.Orders.Remove(order);
+                _context.SaveChanges();
+            }
+        }
+
+        public bool PayForOrder(Guid orderId, PaymentType payment)
+        {
+            Order order = _context.Orders.FirstOrDefault(o => o.Id == orderId)!;
+            order.PaymentType = payment;
+            order.OrderStatus = Status.Paid;
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool AddTip(Guid orderId, decimal amount)
+        {
+            Order order = _context.Orders.FirstOrDefault(o => o.Id == orderId)!;
+            
+            if(order.OrderStatus == Status.Paid)
+            {
+                order.OrderStatus = Status.PaidAndTipped;
+                order.Tip = amount;
+                _context.Orders.Update(order);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
+        public bool CloseOrder(Guid orderId)
+        {
+            Order order = _context.Orders.FirstOrDefault(o => o.Id == orderId)!;
+
+            if (order.OrderStatus == Status.Paid || order.OrderStatus == Status.PaidAndTipped)
+            {
+                order.OrderStatus = Status.Finished;
+                _context.Orders.Update(order);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool IfCustomerIdValid(Guid id)

@@ -1,5 +1,6 @@
 ﻿using PSP_PoS.Components.ItemOrderComponent;
 using PSP_PoS.Components.OrderService;
+using PSP_PoS.Enums;
 using PSP_PoS.OtherDtos;
 
 namespace PSP_PoS.Components.OrderComponent
@@ -11,10 +12,15 @@ namespace PSP_PoS.Components.OrderComponent
         Order AddOrder(OrderCreateDto order);
         OrderItems AddItemToOrder(Guid orderId, Guid itemId);
         OrderServices AddServiceToOrder(Guid orderId, Guid serviceId);
+        bool AddTaxToOrder(Guid orderId, Guid taxId);
+        bool RemoveTaxFromOrder(Guid orderId);
         Cheque GenerateCheque(Guid orderId);
-
+        void DeleteOrder(Guid orderId);
         bool RemoveItemFromOrder(Guid orderId, Guid itemId);
         bool RemoveServiceFromOrder(Guid orderId, Guid itemId);
+        bool PayForOrder(Guid orderId, PaymentType payment);
+        bool AddTip(Guid orderId, decimal amount);
+        bool CloseOrder(Guid orderId);
         bool IfCustomerIdValid(Guid id);
         bool IfEmployeeIdValid(Guid id);
         bool IfOrderIdValid(Guid id);
