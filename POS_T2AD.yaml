@@ -1,0 +1,2298 @@
+openapi: 3.0.0
+info:
+  title: POS T2AD
+  version: 1.0.0
+servers:
+  - url: http://{{baseurl}}
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: Employee management
+  - name: Employee management > Authentication
+  - name: Employee management > Accounts
+  - name: Employee management > Accounts > Getters
+  - name: Employee management > Shifts
+  - name: Product and service management
+  - name: Product and service management > Products
+  - name: Product and service management > Products > Getters
+  - name: Product and service management > Services
+  - name: Product and service management > Services > Getters
+  - name: Product and service management > Categories
+  - name: Product and service management > Categories > Getters
+  - name: Taxes
+  - name: Taxes > Getter
+  - name: Discounts and loyalty program management
+  - name: Discounts and loyalty program management > Discounts
+  - name: Discounts and loyalty program management > Discounts > Getters
+  - name: Discounts and loyalty program management > Loyalty Program
+  - name: Discounts and loyalty program management > Loyalty Program > Getters
+  - name: Order management
+  - name: Order management > Orders
+  - name: Order management > Orders > Getters
+  - name: Order management > Payments
+  - name: Order management > Payments > Getters
+  - name: Reservations
+  - name: Reservations > Getters
+  - name: Customer management
+paths:
+  /employees/login:
+    post:
+      tags:
+        - Employee management > Authentication
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                username: username
+                password: password
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Login successful
+                token: exampleToken
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Invalid credentials
+  /employees/logout:
+    post:
+      tags:
+        - Employee management > Authentication
+      summary: Logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                token: exampleToken
+      security:
+        - noauthAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "{ \r\n    \"message\": \"Logout successful\" \r\n}\r\n"
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Invalid token
+  /employees:
+    get:
+      tags:
+        - Employee management > Accounts > Getters
+      summary: Get account
+      parameters:
+        - name: ID
+          in: query
+          schema:
+            type: string
+          example: '""'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Employees:
+                  ID: a4d98781-6638-4e56-9b13-876125ac9dae
+                  Username: jdoe
+                  Password: ''
+                  Name: John
+                  Surname: Doe
+                  Priveledges: 1
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "{\r\n    \"Status\": \"Error\",\r\n    \"Error message\": \"Employee not found in system\"\r\n}"
+  /accounts:
+    post:
+      tags:
+        - Employee management > Accounts
+      summary: Create account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Username: username
+                Password: passsword
+                Name: name
+                Surname: surname
+                Privileges: 1
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Account created successfully
+                ID: 91085266-bd04-414a-9c0b-bf9dbf6dd4a9
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Account creation failed
+  /employees/91085266-bd04-414a-9c0b-bf9dbf6dd4a9:
+    put:
+      tags:
+        - Employee management > Accounts
+      summary: Update account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Username: jdoe
+                Password: ''
+                Name: John
+                Surname: Doe
+                Priveledges: 2
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Account updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Update failed
+    delete:
+      tags:
+        - Employee management > Accounts
+      summary: Delete account
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Account deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Deletion failed
+  /shifts/91085266-bd04-414a-9c0b-bf9dbf6dd4a9/arrival:
+    post:
+      tags:
+        - Employee management > Shifts
+      summary: Log arrival
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ShiftDate: '2023-11-29'
+                StartTime: 2023-11-029T12:30:22
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Arrival logged successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Logging arrival failed
+  /shifts/91085266-bd04-414a-9c0b-bf9dbf6dd4a9/departure:
+    put:
+      tags:
+        - Employee management > Shifts
+      summary: Log departure
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ShiftDate: '2023-11-29'
+                StartTime: 2023-11-029T08:00:00
+                EndTime: 2023-11-029T17:00:00
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Departure logged successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Logging departure failed
+  /product:
+    get:
+      tags:
+        - Product and service management > Products > Getters
+      summary: Get product
+      parameters:
+        - name: Name
+          in: header
+          schema:
+            type: string
+        - name: Id
+          in: header
+          schema:
+            type: string
+        - name: Name
+          in: query
+          schema:
+            type: string
+          example: '""'
+        - name: ID
+          in: query
+          schema:
+            type: string
+          example: '"6cb329b7-3087-4459-aea5-03ebc5905f58"'
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Product:
+                  ID: 6cb329b7-3087-4459-aea5-03ebc5905f58
+                  Name: ProductName
+                  Price: 10.5
+                  Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+                  Description: ProductDescription
+                  Image: image_url
+                  CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+                  Stock: 50
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "{\r\n    \"Status\": \"Error\",\r\n    \"Error message\": \"Item not found in system\"\r\n}"
+  /products:
+    get:
+      tags:
+        - Product and service management > Products > Getters
+      summary: List products
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+          example: '"Electronics"'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Products:
+                  - ID: 6cb329b7-3087-4459-aea5-03ebc5905f58
+                    Name: ProductName
+                    Price: 10.5
+                    Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+                    Description: ProductDescription
+                    Image: image_url
+                    CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+                    Stock: 50
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No products found in this category
+    post:
+      tags:
+        - Product and service management > Products
+      summary: Create product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ID: 6cb329b7-3087-4459-aea5-03ebc5905f58
+                Name: NewProductName
+                Price: 10.5
+                Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+                Description: NewProductDescription
+                Image: new_image_url
+                CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+                Stock: 50
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Product created successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Product creation failed
+  /products/6cb329b7-3087-4459-aea5-03ebc5905f58/tax-group:
+    put:
+      tags:
+        - Product and service management > Products
+      summary: Assign product tax rates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Tax rate assigned successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Tax rate assignment failed
+  /products/6cb329b7-3087-4459-aea5-03ebc5905f58/category:
+    put:
+      tags:
+        - Product and service management > Products
+      summary: Categorize product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "{ \"message\": \"Product categorized successfully\" }\r\n"
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Category assignment failed
+  /products/6cb329b7-3087-4459-aea5-03ebc5905f58:
+    put:
+      tags:
+        - Product and service management > Products
+      summary: Update product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: UpdatedProductName
+                Price: 10.5
+                Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+                Description: UpdatedProductDescription
+                Image: image_url
+                CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+                Stock: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "{ \"message\": \"Product updated successfully\" }\r\n"
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Product update failed
+    delete:
+      tags:
+        - Product and service management > Products
+      summary: Delete product
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Product deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Product deletion failed
+  /services:
+    get:
+      tags:
+        - Product and service management > Services > Getters
+      summary: List services
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Services:
+                  - ID: e5e1f449-fb19-4007-a803-118b9141974d
+                    Price: 100
+                    Name: ServiceName
+                    Description: ServiceDescription
+                    Image: image_url
+                    CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+                    Duration: 10.5
+                    Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No services found
+    post:
+      tags:
+        - Product and service management > Services
+      summary: Create service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Price: 100
+                Name: NewServiceName
+                Description: NewServiceDescription
+                Image: image_url
+                CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+                Duration: 10.5
+                Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Service created successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Service creation failed
+    put:
+      tags:
+        - Product and service management > Services
+      summary: Update service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ID: e5e1f449-fb19-4007-a803-118b9141974d
+                Price: 100
+                Name: UpdatedServiceName
+                Description: UpdatedServiceDescription
+                Image: image_url
+                CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+                Duration: 10.5
+                Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+      parameters:
+        - name: ID
+          in: query
+          schema:
+            type: string
+          example: '"e5e1f449-fb19-4007-a803-118b9141974d"'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Service updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Service update failed
+  /services/e5e1f449-fb19-4007-a803-118b9141974d/time_slots:
+    put:
+      tags:
+        - Product and service management > Services
+      summary: Assign time slots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Duration: 10.5
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Time slots assigned successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Time slots assignment failed
+  /services/e5e1f449-fb19-4007-a803-118b9141974d/tax:
+    put:
+      tags:
+        - Product and service management > Services
+      summary: Assign service tax rates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Tax rate: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Tax rate assigned successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Tax rate assignment failed
+  /services/e5e1f449-fb19-4007-a803-118b9141974d/category:
+    put:
+      tags:
+        - Product and service management > Services
+      summary: Categorize service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                CategoryId: f831bfcd-a9a3-47df-901e-14fdb104f839
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Service categorized successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Category assignment failed
+  /services/e5e1f449-fb19-4007-a803-118b9141974d:
+    delete:
+      tags:
+        - Product and service management > Services
+      summary: Delete service
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Service deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Service deletion failed
+  /categories:
+    get:
+      tags:
+        - Product and service management > Categories > Getters
+      summary: List all categories
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Categories:
+                  - ID: f831bfcd-a9a3-47df-901e-14fdb104f839
+                    Name: CategoryName
+                    Parent: 1c04f182-ae68-4506-a4a4-d2b55f07ae38
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No categories found
+    post:
+      tags:
+        - Product and service management > Categories
+      summary: Create category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: NewCategoryName
+                Parent: 1c04f182-ae68-4506-a4a4-d2b55f07ae38
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Category created successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Category creation failed
+    put:
+      tags:
+        - Product and service management > Categories
+      summary: Update category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: UpdatedCategoryName
+                Parent: 1c04f182-ae68-4506-a4a4-d2b55f07ae38
+      parameters:
+        - name: ID
+          in: query
+          schema:
+            type: string
+          example: '"f831bfcd-a9a3-47df-901e-14fdb104f839"'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Category updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Category update failed
+  /categories/f831bfcd-a9a3-47df-901e-14fdb104f839:
+    delete:
+      tags:
+        - Product and service management > Categories
+      summary: Delete category
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Category deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Category deletion failed
+  /tax-rates:
+    get:
+      tags:
+        - Taxes > Getter
+      summary: List all tax rate groups
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Tax Rate Groups:
+                  - ID: 00d6631d-bdaa-450b-b99e-2d3389fcc681
+                    Name: TaxGroupName
+                    Rate: 0.15
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No tax rate groups found
+    post:
+      tags:
+        - Taxes
+      summary: Create tax rate group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: NewTaxRateGroup
+                Rate: 0.25
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Tax rate group created successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Tax rate group creation failed
+  /tax-rates/00d6631d-bdaa-450b-b99e-2d3389fcc681:
+    put:
+      tags:
+        - Taxes
+      summary: Update tax rate group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: UpdatedTaxGroupName
+                Rate: 0.15
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Tax rate group updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Tax rate group update failed
+    delete:
+      tags:
+        - Taxes
+      summary: Delete tax rate group
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Tax rate group deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Tax rate group deletion failed
+  /discounts:
+    get:
+      tags:
+        - Discounts and loyalty program management > Discounts > Getters
+      summary: List discounts
+      responses:
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No discounts found
+        undefined:
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Discounts:
+                  - ID: ebb375ae-7922-4ed8-a34c-d4230367f471
+                    Name: DiscountName
+                    Percentage: 0.2
+                    Start: '2024-06-01'
+                    End: '2024-08-31'
+                    Amount: 10.5
+    post:
+      tags:
+        - Discounts and loyalty program management > Discounts
+      summary: Create discount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: NewDiscountName
+                Percentage: 0.2
+                Start: '2024-06-01'
+                End: '2024-08-31'
+                Amount: 10.5
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Discount created successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Discount creation failed
+  /discounts/ebb375ae-7922-4ed8-a34c-d4230367f471:
+    put:
+      tags:
+        - Discounts and loyalty program management > Discounts
+      summary: Update discount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: UpdatedDiscountName
+                Percentage: 0.2
+                Start: '2024-06-01'
+                End: '2024-08-31'
+                Amount: 10.5
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Discount updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Discount update failed
+    delete:
+      tags:
+        - Discounts and loyalty program management > Discounts
+      summary: Delete discount
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Discount deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Discount deletion failed
+  /loyalty-programs:
+    get:
+      tags:
+        - Discounts and loyalty program management > Loyalty Program > Getters
+      summary: List loyalty programs
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Loyalty Programs:
+                  - ID: b68016b0-5601-438a-bf21-f8b37a7bac9e
+                    CustomerId: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                    EnrollmentDate: '2023-10-30'
+                    Points: 0.1
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No loyalty programs found
+    post:
+      tags:
+        - Discounts and loyalty program management > Loyalty Program
+      summary: Create loyalty program
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                CustomerId: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                EnrollmentDate: '2023-10-30'
+                Points: 0.1
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Loyalty program created successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Loyalty program creation failed
+  /loyalty-programs/b68016b0-5601-438a-bf21-f8b37a7bac9e:
+    put:
+      tags:
+        - Discounts and loyalty program management > Loyalty Program
+      summary: Update loyalty program
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                CustomerId: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                EnrollmentDate: '2023-10-30'
+                Points: 0.1
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Loyalty program updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Loyalty program update failed
+    delete:
+      tags:
+        - Discounts and loyalty program management > Loyalty Program
+      summary: Delete loyalty program
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Loyalty program deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Loyalty program deletion failed
+  /loyalty-programs/b68016b0-5601-438a-bf21-f8b37a7bac9e/points:
+    put:
+      tags:
+        - Discounts and loyalty program management > Loyalty Program
+      summary: Set points earning rates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Points: 0.2
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Points earning rates set successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Setting earning rates failed
+  /orders:
+    get:
+      tags:
+        - Order management > Orders > Getters
+      summary: List orders
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Orders:
+                  - ID: f68d4586-5192-4c04-9f19-eedd357f9312
+                    CustomerId: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                    EmployId: a4d98781-6638-4e56-9b13-876125ac9dae
+                    Date: 2023-11-029T12:30:22
+                    Order Status: 1
+                    Order Type: 2
+                    Total Price: 100
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No orders found
+    post:
+      tags:
+        - Order management > Orders
+      summary: Create Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                CustomerId: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                EmployId: a4d98781-6638-4e56-9b13-876125ac9dae
+                Date: 2023-11-029T12:30:22
+                Order Status: 1
+                Order Type: 2
+                Total Price: 100
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Order created successfully
+                OrderId: f68d4586-5192-4c04-9f19-eedd357f9312
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Order creation failed
+  /orders/f68d4586-5192-4c04-9f19-eedd357f9312/print:
+    get:
+      tags:
+        - Order management > Orders > Getters
+      summary: Print order bill
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Order bill printed successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Print failed
+  /orders/f68d4586-5192-4c04-9f19-eedd357f9312:
+    put:
+      tags:
+        - Order management > Orders
+      summary: Update order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                CustomerId: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                EmployId: a4d98781-6638-4e56-9b13-876125ac9dae
+                Date: 2023-11-029T12:30:22
+                Order Status: 1
+                Order Type: 3
+                Total Price: 100
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Order updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Order update failed
+    delete:
+      tags:
+        - Order management > Orders
+      summary: Cancel order
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Order cancelled successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Cancellation failed
+  /orders/f68d4586-5192-4c04-9f19-eedd357f9312/Order Status:
+    put:
+      tags:
+        - Order management > Orders
+      summary: Order status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Order Status: 2
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Order status updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Status update failed
+  /orders/f68d4586-5192-4c04-9f19-eedd357f9312/payments:
+    post:
+      tags:
+        - Order management > Orders
+      summary: Process payment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                OrderId: f68d4586-5192-4c04-9f19-eedd357f9312
+                Payment Date: '2023-11-30'
+                Method: 1
+                Amount Paid: 100
+                Tips: 10
+                Change: 0
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Payment processed successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Payment processing failed
+  /orders/f68d4586-5192-4c04-9f19-eedd357f9312/refund:
+    post:
+      tags:
+        - Order management > Orders
+      summary: Handle refund
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                OrderId: f68d4586-5192-4c04-9f19-eedd357f9312
+                PaymentId: eadaa4c3-2e17-4cc1-af32-dcaa7f818113
+                Refund amount: 100
+                Reason: Item returned
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Refund processed successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Refund processing failed
+  /orders/f68d4586-5192-4c04-9f19-eedd357f9312/item:
+    post:
+      tags:
+        - Order management > Orders
+      summary: Add item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                OrderId: f68d4586-5192-4c04-9f19-eedd357f9312
+                ProductId: 6cb329b7-3087-4459-aea5-03ebc5905f58
+                ServiceId: ''
+                Quantity: 2
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "{\r\n    \"message\": \"Item added successfully\"\r\n}"
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "{\r\n    \"message\": \"Item addition failed\"\r\n}"
+  /orders/apply-discount:
+    post:
+      tags:
+        - Order management > Orders
+      summary: Apply discount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                OrderID: f68d4586-5192-4c04-9f19-eedd357f9312
+                DiscountID: ebb375ae-7922-4ed8-a34c-d4230367f471
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Discount applied successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Failed to apply discount
+  /payments:
+    get:
+      tags:
+        - Order management > Payments > Getters
+      summary: Get payment
+      parameters:
+        - name: PaymentId
+          in: query
+          schema:
+            type: string
+          example: '"eadaa4c3-2e17-4cc1-af32-dcaa7f818113"'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                PaymentId: eadaa4c3-2e17-4cc1-af32-dcaa7f818113
+                OrderId: f68d4586-5192-4c04-9f19-eedd357f9312
+                Payment Date: '2023-11-30'
+                Method: 1
+                Amount Paid: 100
+                Tips: 10
+                Change: 0
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Payment not found
+  /reservation:
+    get:
+      tags:
+        - Reservations > Getters
+      summary: List reservations
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Reservations:
+                  - ID: 3fe45b06-9d5f-45c1-b048-59861692cd81
+                    ServiceID: e5e1f449-fb19-4007-a803-118b9141974d
+                    Table: c0d7358c-5342-4ce1-852a-2996fbbdf6fd
+                    EmployeeID: a4d98781-6638-4e56-9b13-876125ac9dae
+                    CustomerID: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                    Date: 2023-11-029T12:30:22
+                    Status: 2
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: No reservations found
+    post:
+      tags:
+        - Reservations
+      summary: Add reservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ServiceID: e5e1f449-fb19-4007-a803-118b9141974d
+                Table: c0d7358c-5342-4ce1-852a-2996fbbdf6fd
+                EmployeeID: a4d98781-6638-4e56-9b13-876125ac9dae
+                CustomerID: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                Date: 2023-11-029T12:30:22
+                Status: 2
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Reservation added successfully
+                Reservation ID: 3fe45b06-9d5f-45c1-b048-59861692cd81
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Adding reservation failed
+  /reservation/3fe45b06-9d5f-45c1-b048-59861692cd81:
+    put:
+      tags:
+        - Reservations
+      summary: Update reservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                ServiceID: e5e1f449-fb19-4007-a803-118b9141974d
+                Table: c0d7358c-5342-4ce1-852a-2996fbbdf6fd
+                EmployeeID: a4d98781-6638-4e56-9b13-876125ac9dae
+                CustomerID: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                Date: 2023-11-029T12:30:22
+                Status: 3
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Reservation updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Reservation update failed
+    delete:
+      tags:
+        - Reservations
+      summary: Delete reservation
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Reservation deleted successfully
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Reservation deletion failed
+  /customer:
+    post:
+      tags:
+        - Customer management
+      summary: Create customer account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: name
+                Email: email
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Customer added successfully
+                Customer ID: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Adding reservation failed
+    get:
+      tags:
+        - Customer management
+      summary: Get customer account
+      parameters:
+        - name: ID
+          in: query
+          schema:
+            type: string
+          example: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Customer:
+                  ID: bcff2ab5-a039-4bbf-b7ed-265ea89b201d
+                  Name: name
+                  Email: email
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Customer not found
+  /customer/bcff2ab5-a039-4bbf-b7ed-265ea89b201d:
+    delete:
+      tags:
+        - Customer management
+      summary: Delete customer account
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Customer deleted successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Customer deletion failed
+    put:
+      tags:
+        - Customer management
+      summary: Update customer account
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: Customer updated successfully
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: Could not update customer

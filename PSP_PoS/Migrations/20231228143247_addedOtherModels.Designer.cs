@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSP_PoS.Data;
 
@@ -10,9 +11,11 @@ using PSP_PoS.Data;
 namespace PSP_PoS.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231228143247_addedOtherModels")]
+    partial class addedOtherModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -149,24 +152,6 @@ namespace PSP_PoS.Migrations
                     b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("PSP_PoS.Components.ItemOrderComponent.OrderItems", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("OrderId", "ItemId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("OrderItems");
-                });
-
             modelBuilder.Entity("PSP_PoS.Components.OrderComponent.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -185,13 +170,13 @@ namespace PSP_PoS.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("PaymentType")
+                    b.Property<int>("PaymentType")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("TaxId")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("Tip")
+                    b.Property<decimal>("Tip")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -203,24 +188,6 @@ namespace PSP_PoS.Migrations
                     b.HasIndex("TaxId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("PSP_PoS.Components.OrderService.OrderServices", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("OrderId", "ServiceId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("OrderServices");
                 });
 
             modelBuilder.Entity("PSP_PoS.Components.ServiceComponent.Service", b =>
@@ -292,25 +259,6 @@ namespace PSP_PoS.Migrations
                     b.Navigation("Discount");
                 });
 
-            modelBuilder.Entity("PSP_PoS.Components.ItemOrderComponent.OrderItems", b =>
-                {
-                    b.HasOne("PSP_PoS.Components.ItemComponent.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PSP_PoS.Components.OrderComponent.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("PSP_PoS.Components.OrderComponent.Order", b =>
                 {
                     b.HasOne("PSP_PoS.Components.CustomerComponent.Customer", "Customer")
@@ -334,25 +282,6 @@ namespace PSP_PoS.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Tax");
-                });
-
-            modelBuilder.Entity("PSP_PoS.Components.OrderService.OrderServices", b =>
-                {
-                    b.HasOne("PSP_PoS.Components.OrderComponent.Order", "Order")
-                        .WithMany("OrderServices")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PSP_PoS.Components.ServiceComponent.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("PSP_PoS.Components.ServiceComponent.Service", b =>
@@ -394,13 +323,6 @@ namespace PSP_PoS.Migrations
             modelBuilder.Entity("PSP_PoS.Components.EmployeeComponent.Employee", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("PSP_PoS.Components.OrderComponent.Order", b =>
-                {
-                    b.Navigation("OrderItems");
-
-                    b.Navigation("OrderServices");
                 });
 
             modelBuilder.Entity("PSP_PoS.Components.TaxComponent.Tax", b =>

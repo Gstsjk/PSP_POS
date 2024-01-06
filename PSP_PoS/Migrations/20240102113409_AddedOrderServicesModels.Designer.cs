@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSP_PoS.Data;
 
@@ -10,9 +11,11 @@ using PSP_PoS.Data;
 namespace PSP_PoS.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240102113409_AddedOrderServicesModels")]
+    partial class AddedOrderServicesModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -185,13 +188,13 @@ namespace PSP_PoS.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("PaymentType")
+                    b.Property<int>("PaymentType")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("TaxId")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("Tip")
+                    b.Property<decimal>("Tip")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

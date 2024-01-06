@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSP_PoS.Data;
 
@@ -10,9 +11,11 @@ using PSP_PoS.Data;
 namespace PSP_PoS.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240104090543_Test")]
+    partial class Test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -157,12 +160,7 @@ namespace PSP_PoS.Migrations
                     b.Property<Guid>("ItemId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("OrderId", "ItemId");
-
-                    b.HasIndex("ItemId");
 
                     b.ToTable("OrderItems");
                 });
@@ -212,9 +210,6 @@ namespace PSP_PoS.Migrations
 
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("OrderId", "ServiceId");
 
@@ -294,21 +289,11 @@ namespace PSP_PoS.Migrations
 
             modelBuilder.Entity("PSP_PoS.Components.ItemOrderComponent.OrderItems", b =>
                 {
-                    b.HasOne("PSP_PoS.Components.ItemComponent.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PSP_PoS.Components.OrderComponent.Order", "Order")
+                    b.HasOne("PSP_PoS.Components.OrderComponent.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("PSP_PoS.Components.OrderComponent.Order", b =>
